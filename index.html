@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="AI를 활용해 기획, 개발, QA 사이의 출시 병목을 줄이는 Release Acceleration 포트폴리오">
+    <meta name="description" content="AI-native QA / Release Engineer 포트폴리오">
     <meta name="author" content="시우 조">
-    <meta property="og:title" content="AI-native Release Acceleration Portfolio">
-    <meta property="og:description" content="고객 니즈에서 PMF 가설, 구현, 테스트 계획, 회귀 검증까지 병렬화하는 AI-native 출시 프로세스 포트폴리오입니다.">
+    <meta property="og:title" content="AI-native QA / Release Engineer">
+    <meta property="og:description" content="릴리즈 병목을 코드·테스트·문서·회귀 자동화로 줄이는 포트폴리오입니다.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://prefix9671.github.io/">
-    <title>AI-native Release Acceleration Portfolio</title>
+    <title>AI-native QA / Release Engineer</title>
     <style>
       :root {
         color-scheme: light;
@@ -38,8 +38,8 @@
         margin: 0;
         background: var(--paper);
         color: var(--ink);
-        font-family: Arial, "Noto Sans KR", sans-serif;
-        line-height: 1.6;
+        font-family: "Pretendard", "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+        line-height: 1.58;
       }
 
       a {
@@ -102,7 +102,7 @@
         grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.72fr);
         gap: 34px;
         align-items: stretch;
-        min-height: 520px;
+        min-height: 470px;
         border: 1px solid var(--line);
         border-top: 8px solid var(--navy);
         background: var(--sheet);
@@ -110,7 +110,7 @@
       }
 
       .hero-copy {
-        padding: 42px;
+        padding: 38px;
       }
 
       .eyebrow {
@@ -131,9 +131,24 @@
 
       h1 {
         max-width: 780px;
+        margin-bottom: 12px;
+        font-size: 2.08rem;
+        line-height: 1.12;
+        letter-spacing: 0;
+      }
+
+      .hero-statement {
+        max-width: 780px;
         margin-bottom: 18px;
-        font-size: 3.6rem;
-        line-height: 1.05;
+        color: var(--navy);
+        font-size: 1.52rem;
+        font-weight: 900;
+        line-height: 1.28;
+        letter-spacing: 0;
+      }
+
+      .keep {
+        white-space: nowrap;
       }
 
       h2 {
@@ -151,7 +166,8 @@
       .lead {
         max-width: 760px;
         color: var(--muted);
-        font-size: 1.16rem;
+        font-size: 1rem;
+        line-height: 1.7;
       }
 
       .hero-visual {
@@ -161,7 +177,7 @@
         gap: 18px;
         border-left: 1px solid var(--line);
         background: #f8faf7;
-        padding: 28px;
+        padding: 26px;
       }
 
       .cycle-map {
@@ -378,7 +394,11 @@
         }
 
         h1 {
-          font-size: 2.7rem;
+          font-size: 1.82rem;
+        }
+
+        .hero-statement {
+          font-size: 1.32rem;
         }
       }
 
@@ -406,7 +426,11 @@
         }
 
         h1 {
-          font-size: 2.25rem;
+          font-size: 1.55rem;
+        }
+
+        .hero-statement {
+          font-size: 1.16rem;
         }
 
         h2 {
@@ -418,7 +442,7 @@
   <body>
     <header class="site-header">
       <nav class="nav" aria-label="주요 메뉴">
-        <a class="brand" href="#top">AI-native Release Acceleration</a>
+        <a class="brand" href="#top">AI-native QA / Release Engineer</a>
         <div class="nav-links">
           <a href="#thesis">Thesis</a>
           <a href="#portfolio">Portfolio</a>
@@ -432,7 +456,12 @@
         <div class="hero-sheet">
           <div class="hero-copy">
             <p class="eyebrow">Resume Summary · Portfolio Gateway</p>
-            <h1>AI로 기획, 개발, QA 사이의 출시 병목을 줄이는 사람</h1>
+            <h1>AI-native QA / Release Engineer</h1>
+            <p class="hero-statement">
+              <span>릴리즈 병목을</span>
+              <span class="keep">코드·테스트·문서·회귀</span>
+              <span class="keep">자동화로 줄이는 사람</span>
+            </p>
             <p class="lead">
               고객 니즈가 시장에서 확인된 뒤, PMF 가설, 구현, 테스트 계획, 회귀 검증, 리뷰가 직렬로
               늘어지는 문제를 AI-native workflow로 병렬화합니다. 목표는 개발만 빠르게 하는 것이 아니라,
