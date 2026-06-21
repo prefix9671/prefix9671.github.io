@@ -9,6 +9,7 @@ This draft captures a portfolio plan for explaining a documentation system desig
 - how a large automation repository exposes the right starting point to humans and AI agents
 - why active documents, current phase notes, architecture docs, and update policy are separated
 - how agent handoff context is restored across sessions
+- how session logs and phase contracts preserve context across context compaction or agent handoff
 - how documentation updates are routed after code, tool, or process changes
 
 ## Neutralized Structure Map
@@ -29,6 +30,7 @@ repository-root/
 |   |-- DocsHub.md
 |   |-- Current Phase/
 |   |   |-- CurrentPhase.md
+|   |   |-- PhasePlan.md
 |   |   `-- VerificationChecklist.md
 |   |-- Architecture/
 |   |   |-- SystemOverview.md
@@ -39,6 +41,7 @@ repository-root/
 |   |-- Wiki/
 |   |   |-- ProjectStructure.md
 |   |   |-- UserManual.md
+|   |   |-- KnowledgeBase.md
 |   |   `-- Changelog.md
 |   |-- Future/
 |   |   |-- Roadmap.md
@@ -50,6 +53,8 @@ repository-root/
 |   |   `-- asset_submission_guide.md
 |   |-- <program>/
 |   |   |-- index.md
+|   |   |-- phase_log.md
+|   |   |-- action_log.md
 |   |   |-- 10_screen_specs/
 |   |   |-- 20_query_modules/
 |   |   |-- 30_test_cases/
@@ -83,7 +88,8 @@ The structure is intentionally split into layers.
 | `Current Phase/` | Keeps the present goal, risks, and acceptance criteria separate from historical wiki pages. |
 | `Architecture/` | Describes current implementation and runtime boundaries. |
 | `Best Practices/` | Holds policies that should survive individual feature changes. |
-| `Wiki/` | Stores reference material, user-facing guidance, and changelog history. |
+| Session / action logs | Record work progress, blockers, alternatives, reviews, and handoff notes during execution. |
+| `Wiki/` | Stores reference material, user-facing guidance, changelog history, and QA-approved knowledge assets. |
 | `Future/` | Keeps ideas visible without letting them override current behavior. |
 | `common/` | Extracts reusable planning, test-case, template, and asset rules. |
 | `<program>/` | Contains the most specific screen, query, test, report, runtime, and asset documents. |
@@ -100,6 +106,8 @@ The repository structure was designed so that different AI agents can recover co
 5. `ActiveDocs.md` identifies which documents are authoritative.
 6. `Current Phase`, `Architecture`, and `DocumentationWorkflow` form the minimum context set.
 7. `Changelog` and action-log style documents preserve recent decisions and handoff history.
+8. Phase documents define each work phase, owner role, target artifact, and done/QA conditions.
+9. Session logs record blocked points, alternatives, review notes, and next handoff context.
 
 This creates a repeatable handoff loop:
 
@@ -107,10 +115,36 @@ This creates a repeatable handoff loop:
 Start session
 -> Read active document registry
 -> Read current goal, architecture, and documentation workflow
+-> Read phase plan, session log, blockers, alternatives, and review notes
 -> Add program-specific docs only when task scope requires it
 -> Implement or edit
 -> Update affected active docs and compatibility entries
 -> Record meaningful changes for the next agent
+```
+
+## Multi-agent Phase And Knowledge Asset Flow
+
+The structure is intended to support multi-agent work without relying on a single uninterrupted chat thread.
+
+| Step | Documented In | Purpose |
+|---|---|---|
+| Phase opened | Phase plan | Define scope, owner role, expected artifact, and done condition. |
+| Work in progress | Session log | Record what changed, what was observed, and what the next agent should read. |
+| Blocked point | Blocker / alternative log | Prevent another agent from repeating the same failed route. |
+| Review | Review notes | Capture human review, QA review, and accepted changes. |
+| QA gate | QA result | Prove that the phase artifact met its explicit acceptance criteria. |
+| Knowledge promotion | Wiki / knowledge base | Move stable, QA-passed information into durable reusable docs. |
+
+This creates the intended operating loop:
+
+```text
+phase scope defined
+-> agents update logs while working
+-> blockers, alternatives, and reviews are recorded
+-> phase artifact completed
+-> QA passes
+-> stable information promoted to Wiki
+-> next phase starts from durable context, not chat memory
 ```
 
 ## Documentation Policy And Update Guide
@@ -121,6 +155,9 @@ The observed policy can be summarized as follows.
 - Documents not registered as active are treated as inactive, historical, or compatibility-only.
 - Current operational truth outranks architecture, architecture outranks policy, policy outranks wiki, and wiki outranks future plans.
 - When a change affects structure, runtime, user workflow, program docs, or policy, the matching active document must be updated in the same change.
+- Multi-agent work must define phase scope, completion criteria, QA gate, and handoff notes before being treated as complete.
+- Blockers, rejected alternatives, and review feedback should be recorded while the work is happening, not reconstructed afterward.
+- QA-passed phase results should be promoted to wiki or knowledge-base docs so they become reusable organizational memory.
 - New baseline documents must be registered in both the active registry and the document hub.
 - Compatibility files should stay short and point to the current authoritative document.
 - Program-specific details should not leak into common templates.
@@ -135,9 +172,10 @@ Recommended portfolio angle:
 - **Problem:** AI agents and humans lose context when automation work spans code, UI evidence, test cases, runtime constraints, and historical decisions.
 - **Approach:** Build a docs-first repository map with an active-document registry, layered authority, and explicit context-restoration workflow.
 - **Action:** Separate current phase, architecture, best practices, wiki, future backlog, common templates, and program-specific detail docs.
-- **Agent Handoff:** Use root guides, restore workflow, document-manager skill, changelog, and action logs to let each agent reconstruct task context.
+- **Agent Handoff:** Use root guides, restore workflow, document-manager skill, phase docs, session logs, changelog, and action logs to let each agent reconstruct task context.
 - **Governance:** Require active-document registration, update triggers, conflict-resolution rules, and compatibility entry maintenance.
-- **Result To Claim Carefully:** A repeatable documentation structure that reduces context loss and makes AI-assisted maintenance safer and easier to resume.
+- **Knowledge Assetization:** Promote phase docs to wiki only after the phase artifact is complete and QA has passed.
+- **Result To Claim Carefully:** A repeatable documentation structure that reduces context loss, supports context compression, and makes AI-assisted maintenance safer and easier to resume.
 
 ## Public Portfolio Boundary
 

@@ -22,6 +22,7 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 - `index.html` explains the market problem and links to detailed portfolio pages.
 - `portfolio/release-qa.html` preserves the original `AI-native Resume Evidence Pack - Release QA` detailed page tone.
 - `portfolio/documentation-os.html` presents the document structure case as a detailed portfolio page.
+- The documentation case includes session logs, phase completion criteria, blocker/alternative/review notes, QA gates, and Wiki knowledge promotion.
 - Release QA detail evidence is collapsed by default and opened only by readers who need it.
 - Release QA evidence edits start in `release_qa_detail.md`, then the HTML detail block is synchronized before publishing.
 - Private-source portfolio drafts must copy structure and intent only, not source content.

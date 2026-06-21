@@ -79,3 +79,13 @@ GitHub Pages의 대표 문서는 `index.html`이며, 상세 근거는 `portfolio
 - 원본 저장소가 private이면 포트폴리오 문서에 그 사실을 명시하고, 공개본은 neutralized draft로 취급한다.
 - `portfolio/automation-doc-structure/` 아래 Markdown 초안은 `portfolio/documentation-os.html`에 반영되기 전까지 검토용 자료로 본다.
 - 구조만 옮기는 경우 실제 원본 폴더명을 그대로 복제하기보다 `<program>`, `<runtime>`, `<report_validation>` 같은 일반화된 이름을 사용한다.
+
+## 8. 다중 에이전트 phase / 세션 로그 정책
+
+문서 운영 체계 포트폴리오에서는 다음 내용을 핵심 운영 정책으로 유지한다.
+
+- 다중 에이전트 작업은 phase별 목표, 담당 역할, 산출물, 완료 조건, QA gate를 명시한다.
+- 작업 중 막힌 지점, 폐기한 대안, 선택한 우회안, 리뷰 의견은 세션 로그 또는 action log에 진행 중 기록한다.
+- 컨텍스트 압축이나 에이전트 교체가 발생해도 다음 작업자가 phase 문서와 세션 로그만 읽고 이어갈 수 있어야 한다.
+- phase 산출물이 완료되고 QA를 통과한 뒤에만 안정 정보를 Wiki 또는 Knowledge Base로 승격한다.
+- Wiki에 승격된 내용은 다음 phase와 신규 에이전트의 기준 지식 자산으로 사용한다.

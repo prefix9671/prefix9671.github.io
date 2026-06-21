@@ -133,7 +133,7 @@
         <div>
           <div class="eyebrow">Detailed Portfolio · Documentation Operating System</div>
           <h1>AI-assisted Automation 문서 운영 체계</h1>
-          <p class="subtitle">사람과 AI 에이전트가 같은 기준 문서를 읽고 기획, 개발, QA 맥락을 복원하도록 설계한 문서 구조 사례</p>
+          <p class="subtitle">사람과 AI 에이전트가 같은 기준 문서, 세션 로그, phase 계약을 읽고 기획, 개발, QA 맥락을 복원하도록 설계한 문서 구조 사례</p>
           <div class="toc">
             <a href="../index.html">메인</a>
             <a href="automation-doc-structure/README.md">구조 초안</a>
@@ -150,7 +150,7 @@
       <div class="hero">
         <p>
           이 사례의 핵심은 문서를 많이 만든 것이 아니라, AI 에이전트와 사람이 같은 기준으로 작업 맥락을 복원하도록
-          문서의 권한, 진입점, 업데이트 트리거, 호환성 입구를 설계한 것입니다.
+          문서의 권한, 진입점, 세션 로그, phase별 완료 조건, 업데이트 트리거, 호환성 입구를 설계한 것입니다.
         </p>
         <p>
           기획, 개발, QA가 각자 다른 해석을 들고 움직이면 출시 속도는 느려집니다. 문서 운영 체계는 고객 니즈, PMF 가설,
@@ -173,7 +173,7 @@
         </div>
         <div class="card soft">
           <h3>Approach</h3>
-          <p>활성 문서 인덱스, 문서 허브, 현재 상태, 구조 문서, 업데이트 정책, 프로그램별 상세 문서를 계층화했습니다.</p>
+          <p>활성 문서 인덱스, 문서 허브, 현재 상태, phase 문서, 세션 로그, 구조 문서, 업데이트 정책, 프로그램별 상세 문서를 계층화했습니다.</p>
         </div>
       </div>
 
@@ -181,7 +181,7 @@
       <div class="asset-box">
         <p>
           AI를 출시 프로세스에 넣으려면 프롬프트보다 먼저 문맥 공급망이 필요합니다.
-          이 문서 구조는 각 에이전트가 "현재 기준은 무엇인가", "어디까지 완료됐는가", "어떤 문서를 함께 갱신해야 하는가"를
+          이 문서 구조는 각 에이전트가 "현재 기준은 무엇인가", "어느 phase의 완료 조건을 향해 가는가", "어디에서 막혔고 어떤 대안을 검토했는가", "어떤 문서를 함께 갱신해야 하는가"를
           채팅 기록 없이 복원하게 만드는 운영 체계입니다.
         </p>
       </div>
@@ -208,10 +208,11 @@
         </thead>
         <tbody>
           <tr><td>Active Docs</td><td>활성 기준 문서 인덱스</td><td>낡은 문서나 실험 문서가 암묵적 정책이 되는 것을 방지</td></tr>
-          <tr><td>Current Phase</td><td>현재 목표, 리스크, 완료 기준</td><td>오늘의 작업 기준을 과거 위키와 분리</td></tr>
+          <tr><td>Current Phase</td><td>현재 목표, 리스크, phase별 완료 기준</td><td>오늘의 작업 기준을 과거 위키와 분리</td></tr>
           <tr><td>Architecture</td><td>현재 구현 구조와 실행 경로</td><td>코드와 도구의 실제 책임 경계를 설명</td></tr>
           <tr><td>Best Practices</td><td>문서 운영과 엔지니어링 규칙</td><td>개별 기능보다 오래 살아야 하는 정책을 보관</td></tr>
-          <tr><td>Wiki</td><td>구조 참고서, 사용 가이드, 변경 이력</td><td>사람이 읽기 쉬운 설명과 히스토리 제공</td></tr>
+          <tr><td>Session / Action Logs</td><td>세션별 작업, 막힘, 대안, 리뷰 기록</td><td>다른 에이전트나 컨텍스트 압축 이후에도 작업 맥락을 복원</td></tr>
+          <tr><td>Wiki</td><td>구조 참고서, 사용 가이드, 변경 이력, 지식 자산</td><td>QA를 통과한 결과를 재사용 가능한 조직 지식으로 승격</td></tr>
           <tr><td>Future</td><td>로드맵과 아이디어</td><td>아이디어가 현재 동작을 덮어쓰지 않도록 격리</td></tr>
           <tr><td>Common</td><td>재사용 템플릿과 공통 규칙</td><td>프로그램별 상세 문서가 같은 형식으로 확장되도록 지원</td></tr>
           <tr><td>Program Docs</td><td>화면, 쿼리, 테스트, 리포트, 런타임 상세</td><td>가장 구체적인 검증 근거를 별도 수명주기로 관리</td></tr>
@@ -223,12 +224,19 @@
 |-- ActiveDocs.md
 |-- DocsHub.md
 |-- Current Phase/
+|   |-- CurrentPhase.md
+|   |-- PhasePlan.md
+|   `-- VerificationChecklist.md
 |-- Architecture/
 |-- Best Practices/
 |-- Wiki/
+|   |-- Changelog.md
+|   `-- KnowledgeBase.md
 |-- Future/
 |-- common/
 `-- &lt;program&gt;/
+    |-- phase_log.md
+    `-- action_log.md
 
 .agent/
 |-- workflows/
@@ -256,7 +264,7 @@ root guides:
         <div>
           <div class="eyebrow">Agent Context Sharing</div>
           <h1>AI 에이전트 간 작업 맥락 공유 의도</h1>
-          <p class="subtitle">채팅 기록이 사라져도 문서만 읽고 현재 작업 기준을 복원하게 만드는 handoff 구조</p>
+          <p class="subtitle">채팅 기록이 사라지거나 컨텍스트가 압축되어도 문서와 로그만 읽고 현재 작업 기준을 복원하게 만드는 handoff 구조</p>
         </div>
       </div>
 
@@ -264,10 +272,50 @@ root guides:
       <pre><code>Start session
 -> Read active document registry
 -> Read current goal, architecture, and documentation workflow
+-> Read phase plan, session log, blockers, alternatives, and review notes
 -> Add common or program-specific docs only when task scope requires it
 -> Implement or edit
 -> Update affected active docs and compatibility entries
 -> Record meaningful changes for the next agent</code></pre>
+
+      <h2>Session Log And Phase Contract</h2>
+      <table>
+        <thead>
+          <tr><th>Document</th><th>What It Records</th><th>Why It Matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Phase Plan</td><td>phase 목표, 담당 범위, 산출물, 완료 조건, QA gate</td><td>다중 에이전트가 같은 종료 기준을 보고 병렬 작업</td></tr>
+          <tr><td>Session Log</td><td>오늘 수행한 작업, 관찰 결과, 다음 사람이 이어갈 위치</td><td>컨텍스트 압축 또는 세션 교체 후에도 복원 가능</td></tr>
+          <tr><td>Blocker / Alternative Log</td><td>막힌 지점, 실패 원인, 폐기한 대안, 선택한 우회안</td><td>다른 에이전트가 같은 실패를 반복하지 않음</td></tr>
+          <tr><td>Review Notes</td><td>사람 리뷰, QA 리뷰, 수정 요청, 결정 사항</td><td>AI 출력이 최종 판단으로 오해되지 않도록 통제</td></tr>
+          <tr><td>QA Result</td><td>검증 명령, 결과, 남은 리스크, 통과 조건</td><td>Wiki 승격 전 증거와 완료 상태를 명확화</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Multi-agent Phase Flow</h2>
+      <pre><code>Phase opened
+-> define scope, owner role, expected artifact, QA condition
+-> agent updates session log while working
+-> blocked point, rejected alternative, and review feedback are recorded
+-> phase artifact completed
+-> QA gate passes
+-> durable information is promoted to Wiki / knowledge base
+-> phase is closed with next-phase handoff notes</code></pre>
+
+      <div class="footer">
+        <span>Documentation OS · Session / Phase Contract</span>
+        <span>Page 3</span>
+      </div>
+    </section>
+
+    <section class="sheet">
+      <div class="topline">
+        <div>
+          <div class="eyebrow">Update Governance</div>
+          <h1>업데이트 라우팅과 Wiki 자산화</h1>
+          <p class="subtitle">작업 중 생긴 맥락을 세션 로그에 남기고, QA를 통과한 안정 정보만 Wiki로 승격하는 운영 방식</p>
+        </div>
+      </div>
 
       <h2>Agent-facing Entry Points</h2>
       <div class="grid-4">
@@ -304,13 +352,17 @@ root guides:
           <tr><td>사용자 workflow 변경</td><td>User Manual + walkthrough entry</td></tr>
           <tr><td>문서 운영 정책 변경</td><td>DocumentationWorkflow + root agent guide</td></tr>
           <tr><td>새 기준 문서 생성</td><td>ActiveDocs + DocsHub + 관련 index</td></tr>
+          <tr><td>다중 에이전트 phase 시작</td><td>Phase Plan + 담당 범위 + 완료 조건</td></tr>
+          <tr><td>작업 중 막힘 또는 대안 발생</td><td>Session Log + Blocker / Alternative Log</td></tr>
+          <tr><td>리뷰 또는 QA 피드백 발생</td><td>Review Notes + QA Result</td></tr>
           <tr><td>의미 있는 변경 발생</td><td>Changelog 또는 action log</td></tr>
+          <tr><td>phase 완료 및 QA 통과</td><td>Wiki / Knowledge Base로 승격</td></tr>
         </tbody>
       </table>
 
       <div class="footer">
         <span>Documentation OS · Agent Handoff</span>
-        <span>Page 3</span>
+        <span>Page 4</span>
       </div>
     </section>
 
@@ -339,7 +391,7 @@ root guides:
         </div>
         <div class="card soft">
           <h3>회귀 검증의 조직 자산화</h3>
-          <p>회귀 테스트 초안과 변경 이력을 축적하면 다음 릴리즈의 QA 기준을 더 빠르게 복원할 수 있습니다.</p>
+          <p>회귀 테스트 초안, phase 결과, QA 통과 기록을 Wiki로 승격하면 다음 릴리즈의 QA 기준을 더 빠르게 복원할 수 있습니다.</p>
         </div>
       </div>
 
@@ -360,7 +412,7 @@ root guides:
 
       <div class="footer">
         <span>Documentation OS · Portfolio Value</span>
-        <span>Page 4</span>
+        <span>Page 5</span>
       </div>
     </section>
   </body>
