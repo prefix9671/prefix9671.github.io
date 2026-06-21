@@ -7,10 +7,16 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 - GitHub repository: <https://github.com/prefix9671/prefix9671.github.io>
 - GitHub Pages URL: <https://prefix9671.github.io/>
 
-## Edit Guide
+## Document Structure
 
-- `index.html`: profile, resume sections, project descriptions, contact links
-- `styles.css`: colors, spacing, responsive layout
-- `.nojekyll`: keeps GitHub Pages from running Jekyll processing
+- `index.html`: published resume/portfolio HTML.
+- `release_qa_detail.md`: Markdown source for the collapsed detail evidence section.
+- `CENTRAL_DOCUMENT_POLICY.md`: central policy for page roles, detail disclosure, and Markdown/HTML sync.
+- `.nojekyll`: keeps GitHub Pages from running Jekyll processing.
 
-The first version uses public GitHub profile and repository information only. Add your real name, email, career history, measurable project outcomes, and any resume PDF link when ready.
+## Policy Summary
+
+- Page 1 is the resume-oriented one-page summary.
+- Page 2 and later are portfolio evidence pages.
+- Detail evidence is collapsed by default and opened only by readers who need it.
+- Detail evidence edits start in `release_qa_detail.md`, then the HTML detail block is synchronized before publishing.
