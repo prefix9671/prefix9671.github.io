@@ -9,6 +9,7 @@ Last updated: 2026-06-21
 - `index.html` (GitHub Pages 게시용 HTML; 원본 팩 파일 `ai_native_release_qa_resume_pack.html`의 게시 사본)
 - `release_qa_detail.md`
 - `CENTRAL_DOCUMENT_POLICY.md`
+- `portfolio/` 아래의 공개용 포트폴리오 초안 문서
 
 GitHub Pages에 게시할 때는 원본 팩 HTML을 `index.html`로 동기화해 사이트 대표 문서로 사용한다.
 
@@ -63,3 +64,13 @@ Page 2 이후에는 포트폴리오로서 PAAR, 실패/통제, 자산화, 개선
 4. Page 2 이후는 포트폴리오 근거 페이지로 유지한다.
 5. 브라우저 또는 정적 검증으로 `<details>` 기본 접힘 상태와 주요 링크를 확인한다.
 6. GitHub Pages 게시 전 최종 HTML과 Markdown을 함께 커밋한다.
+
+## 7. 비공개 출처 기반 포트폴리오 초안 정책
+
+비공개 저장소나 내부 업무 자료를 바탕으로 포트폴리오 초안을 만들 때는 다음 기준을 따른다.
+
+- 공개 저장소에는 원문 내용, 고객명, 내부 제품명, 실행 환경값, 로그, 스크린샷, credential, 데이터베이스명, 내부 URL을 옮기지 않는다.
+- 문서 구조, 역할 분리, 업데이트 정책, 에이전트 맥락 공유 의도처럼 공개 가능한 설계 패턴만 남긴다.
+- 원본 저장소가 private이면 포트폴리오 문서에 그 사실을 명시하고, 공개본은 neutralized draft로 취급한다.
+- `portfolio/` 아래 초안은 `index.html`에 승격되기 전까지 게시용 본문이 아니라 검토용 자료로 본다.
+- 구조만 옮기는 경우 실제 원본 폴더명을 그대로 복제하기보다 `<program>`, `<runtime>`, `<report_validation>` 같은 일반화된 이름을 사용한다.

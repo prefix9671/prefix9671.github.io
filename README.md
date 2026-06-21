@@ -12,6 +12,7 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 - `index.html`: published resume/portfolio HTML.
 - `release_qa_detail.md`: Markdown source for the collapsed detail evidence section.
 - `CENTRAL_DOCUMENT_POLICY.md`: central policy for page roles, detail disclosure, and Markdown/HTML sync.
+- `portfolio/`: neutralized portfolio drafts and structure-only case material.
 - `.nojekyll`: keeps GitHub Pages from running Jekyll processing.
 
 ## Policy Summary
@@ -20,3 +21,4 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 - Page 2 and later are portfolio evidence pages.
 - Detail evidence is collapsed by default and opened only by readers who need it.
 - Detail evidence edits start in `release_qa_detail.md`, then the HTML detail block is synchronized before publishing.
+- Private-source portfolio drafts must copy structure and intent only, not source content.
