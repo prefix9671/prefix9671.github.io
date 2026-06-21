@@ -1,11 +1,16 @@
-# Portfolio Drafts
+# Portfolio
 
-This folder stores neutralized portfolio drafts before they are promoted into the public HTML resume/portfolio page.
+This folder stores detailed portfolio pages and neutralized source material.
 
-## Drafts
+## Pages
+
+- [AI-assisted Release QA](release-qa.html)
+- [Documentation Operating System](documentation-os.html)
+
+## Source Drafts
 
 - [Automation Documentation Structure](automation-doc-structure/README.md)
 
 ## Publication Rule
 
-Drafts in this folder may describe structure, intent, and operating policy, but must not copy private repository content, customer data, screenshots, credentials, internal paths, or environment-specific values.
+Source drafts in this folder may describe structure, intent, and operating policy, but must not copy private repository content, customer data, screenshots, credentials, internal paths, or environment-specific values.

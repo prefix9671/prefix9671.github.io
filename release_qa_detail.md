@@ -1,6 +1,6 @@
 ﻿<!--
 Central Document Policy: CENTRAL_DOCUMENT_POLICY.md
-Sync target: index.html#detail (published), ai_native_release_qa_resume_pack.html#detail (source pack)
+Sync target: portfolio/release-qa.html#detail (published), ai_native_release_qa_resume_pack.html#detail (source pack)
 Document role: detail evidence, collapsed by default in HTML
 Rule: edit this Markdown first for detailed evidence, then sync the rendered HTML detail block before publishing.
 -->

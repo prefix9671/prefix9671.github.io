@@ -141,7 +141,7 @@ Recommended portfolio angle:
 
 ## Public Portfolio Boundary
 
-When this draft is promoted into `index.html`, keep it neutral.
+When this draft is reflected in `portfolio/documentation-os.html`, keep it neutral.
 
 - Use generic terms such as "desktop automation target", "program-specific docs", "runtime integration", and "report validation".
 - Do not include private repository names except where the user explicitly wants the public GitHub link shown.

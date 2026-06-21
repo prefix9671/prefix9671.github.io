@@ -1,826 +1,565 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI-native Resume & Portfolio Pack - Release QA</title>
-  <style>
-    @page { size: A4; margin: 12mm; }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Pretendard", Arial, sans-serif;
-      color: #111827;
-      background: #e5e7eb;
-      line-height: 1.45;
-    }
-    a { color: inherit; }
-    .sheet {
-      width: 210mm;
-      min-height: 297mm;
-      margin: 0 auto 16px auto;
-      padding: 13mm;
-      background: #fff;
-      position: relative;
-      page-break-after: always;
-      overflow: hidden;
-    }
-    .sheet:last-child { page-break-after: auto; }
-    .section-break { page-break-before: always; }
-    .topline {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 2px solid #111827;
-      padding-bottom: 9px;
-      margin-bottom: 13px;
-    }
-    .eyebrow {
-      font-size: 10px;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: #6b7280;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    h1 { font-size: 24px; line-height: 1.15; margin: 0 0 6px; }
-    h2 { font-size: 15px; margin: 15px 0 7px; border-bottom: 1px solid #d1d5db; padding-bottom: 4px; }
-    h3 { font-size: 12px; margin: 0 0 5px; }
-    p { font-size: 10.8px; margin: 0 0 7px; }
-    ul, ol { margin: 0; padding-left: 16px; }
-    li { font-size: 10.5px; margin-bottom: 3.5px; }
-    table { width: 100%; border-collapse: collapse; margin: 7px 0 10px; }
-    th, td { border: 1px solid #d1d5db; padding: 6px 7px; vertical-align: top; font-size: 10.1px; }
-    th { background: #f3f4f6; text-align: left; font-weight: 800; }
-    pre {
-      background: #111827;
-      color: #f9fafb;
-      padding: 9px 10px;
-      border-radius: 7px;
-      overflow: hidden;
-      white-space: pre-wrap;
-      font-size: 9.3px;
-      line-height: 1.42;
-      margin: 7px 0 10px;
-    }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    hr { border: 0; border-top: 1px solid #e5e7eb; margin: 15px 0; }
-    .subtitle { font-size: 12.5px; color: #374151; font-weight: 500; max-width: 150mm; }
-    .contact { text-align: right; font-size: 9.5px; color: #4b5563; white-space: nowrap; }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-    .tag { font-size: 9.3px; padding: 3px 6px; border-radius: 999px; background: #f3f4f6; border: 1px solid #d1d5db; color: #374151; font-weight: 700; }
-    .hero {
-      border: 1px solid #111827;
-      border-radius: 10px;
-      padding: 12px;
-      background: #f9fafb;
-      margin-bottom: 10px;
-    }
-    .hero p { font-size: 11.3px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
-    .card { border: 1px solid #d1d5db; border-radius: 8px; padding: 9px; background: #fff; }
-    .card.soft { background: #f9fafb; }
-    .paar-card { border-top: 4px solid #111827; min-height: 116px; }
-    .label { display: inline-block; font-size: 9.5px; font-weight: 900; color: #fff; background: #111827; padding: 3px 6px; border-radius: 4px; margin-bottom: 6px; }
-    .note { font-size: 10.3px; color: #374151; }
-    .footer {
-      position: absolute; left: 13mm; right: 13mm; bottom: 8mm;
-      border-top: 1px solid #e5e7eb; padding-top: 6px;
-      font-size: 9px; color: #6b7280; display: flex; justify-content: space-between;
-    }
-    .summary-list li { font-size: 10.6px; }
-    .asset-box { border: 1px solid #111827; border-radius: 8px; padding: 10px; background: #f9fafb; }
-    .detail {
-      width: 210mm;
-      margin: 0 auto 16px auto;
-      padding: 13mm;
-      background: #fff;
-    }
-    .detail .topline { page-break-after: avoid; }
-    .detail-disclosure {
-      border: 1px solid #111827;
-      border-radius: 10px;
-      background: #fff;
-      overflow: hidden;
-    }
-    .detail-disclosure > summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px 14px;
-      cursor: pointer;
-      list-style: none;
-      background: #f9fafb;
-      font-size: 12px;
-      font-weight: 900;
-    }
-    .detail-disclosure > summary::-webkit-details-marker { display: none; }
-    .detail-disclosure > summary::after {
-      content: "열기";
-      flex: 0 0 auto;
-      border: 1px solid #111827;
-      border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 9.5px;
-      background: #111827;
-      color: #fff;
-    }
-    .detail-disclosure[open] > summary::after { content: "닫기"; }
-    .detail-summary-copy {
-      display: block;
-      margin-top: 2px;
-      color: #4b5563;
-      font-size: 10px;
-      font-weight: 600;
-    }
-    .detail-content {
-      padding: 14px;
-      border-top: 1px solid #d1d5db;
-    }
-    .detail h1 { font-size: 22px; margin-top: 0; }
-    .detail h2 { font-size: 16px; margin-top: 20px; }
-    .detail h3 { font-size: 13px; margin-top: 14px; }
-    .detail p, .detail li, .detail td, .detail th { font-size: 11px; }
-    .toc {
-      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
-    }
-    .toc a {
-      font-size: 9.5px; text-decoration: none; padding: 4px 7px;
-      border: 1px solid #d1d5db; border-radius: 999px; background: #fff;
-    }
-    @media print {
-      body { background: #fff; }
-      .sheet, .detail { margin: 0; width: auto; }
-      .detail { display: none; }
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="AI를 활용해 기획, 개발, QA 사이의 출시 병목을 줄이는 Release Acceleration 포트폴리오">
+    <meta name="author" content="시우 조">
+    <meta property="og:title" content="AI-native Release Acceleration Portfolio">
+    <meta property="og:description" content="고객 니즈에서 PMF 가설, 구현, 테스트 계획, 회귀 검증까지 병렬화하는 AI-native 출시 프로세스 포트폴리오입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://prefix9671.github.io/">
+    <title>AI-native Release Acceleration Portfolio</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f4f1e8;
+        --sheet: #ffffff;
+        --ink: #141820;
+        --muted: #626a76;
+        --line: #d8d2c2;
+        --navy: #1f2d3d;
+        --green: #2f7d66;
+        --red: #b5533f;
+        --gold: #d9a441;
+        --blue: #496b9d;
+        --shadow: 0 18px 40px rgba(20, 24, 32, 0.09);
+      }
 
-  <section class="sheet resume-sheet" data-doc-role="resume-summary" data-page-purpose="resume">
-    <div class="topline">
-      <div>
-        <div class="eyebrow">Resume Page 1 · AI-native Workflow / QA Automation Lead</div>
-        <h1>AI-assisted Release QA</h1>
-        <p class="subtitle">모호한 릴리즈 설명을 구조화된 AI 입력, 검토 가능한 QA 산출물, 재사용 가능한 조직 자산으로 전환한 사례</p>
-      </div>
-      <div class="contact">
-        Name: 시우 조<br />
-        Case: Release QA / LLMOps<br />
-        Format: Resume Page 1 + Portfolio Evidence Pack
-      </div>
-    </div>
+      * {
+        box-sizing: border-box;
+      }
 
-    <div class="hero">
-      <p>
-        저는 AI를 문서 작성 보조로만 사용하지 않고, 레거시 장비 소프트웨어의 릴리즈노트, SVN diff, 기존 테스트케이스,
-        UI 액션로그, 고객 사용 시나리오를 연결해 <strong>테스트 가능한 질문, 누락 위험, 회귀 테스트 후보, 고객용/내부용 산출물</strong>로 전환하는 workflow를 설계했습니다.
-      </p>
-      <p>
-        핵심 원칙은 AI 출력물을 정답으로 취급하지 않는 것입니다. AI는 변경 영향도 리뷰어이자 누락 질문 생성기로 사용하고,
-        최종 판단은 사람 리뷰, Golden Test Set, Jenkins smoke/nightly regression 후보 분류를 통해 통제했습니다.
-      </p>
-      <div class="tag-row">
-        <span class="tag">AI-native Workflow</span>
-        <span class="tag">Release QA</span>
-        <span class="tag">Human-in-the-loop</span>
-        <span class="tag">Golden Test Set</span>
-        <span class="tag">Jenkins Regression</span>
-        <span class="tag">Legacy System</span>
-      </div>
-    </div>
+      html {
+        scroll-behavior: smooth;
+      }
 
-    <h2>1-page Summary</h2>
-    <div class="grid-2">
-      <div class="card soft">
-        <h3>Positioning</h3>
-        <p>
-          AI-native Workflow / QA Automation Lead. 모호한 개발·QA·운영 업무를 AI가 읽을 수 있는 입력,
-          통제 가능한 출력, 재사용 가능한 조직 자산으로 바꾸는 역할.
-        </p>
-      </div>
-      <div class="card soft">
-        <h3>Operating Pattern</h3>
-        <p>
-          Problem → Input Sources → AI-assisted Review → Human Review → Test Gate → Reusable Asset.
-          AI는 답변자가 아니라 검증 질문과 후보를 만드는 리뷰어로 제한.
-        </p>
-      </div>
-    </div>
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Arial, "Noto Sans KR", sans-serif;
+        line-height: 1.6;
+      }
 
-    <h2>Selected Proof Case</h2>
-    <ul class="summary-list">
-      <li><strong>Why started:</strong> 릴리즈노트가 고객 설명 수준에 머물러 QA 검증 범위와 회귀 위험을 정의하기 어려웠다.</li>
-      <li><strong>Input:</strong> 릴리즈노트, SVN diff, 함수 호출 관계, 기존 TC, UI 액션로그, 고객 사용 시나리오.</li>
-      <li><strong>Approach:</strong> LLM을 릴리즈노트 작성자가 아니라 변경 영향도 리뷰어와 누락 질문 생성기로 사용했다.</li>
-      <li><strong>What broke:</strong> 입력 맥락 부족 시 AI 출력이 일반론으로 흐르고, 고객용/내부용 산출물이 섞였으며, 출력 재현성이 흔들렸다.</li>
-      <li><strong>Rejected:</strong> 릴리즈노트 단독 prompting, 매 릴리즈 전체 회귀 테스트, 개발팀 문서 강화만으로 해결하는 방식은 각각 구체성·비용·조직 의존성 문제로 제외했다.</li>
-      <li><strong>Controls:</strong> 고객용/내부용 산출물 분리, 입력/출력 스키마 고정, Golden Test Set, Jenkins smoke/nightly regression 후보 분류를 적용했다.</li>
-      <li><strong>Assetized:</strong> 릴리즈 QA 템플릿, 누락 질문 패턴, 회귀 후보 분류 기준, Golden Test Set으로 조직 자산화했다.</li>
-    </ul>
+      a {
+        color: inherit;
+      }
 
-    <h2>Core Statement</h2>
-    <div class="asset-box">
-      <p>
-        이 사례의 핵심은 “AI로 릴리즈노트를 예쁘게 작성했다”가 아니다.
-        추상적인 변경 설명을 AI가 읽을 수 있는 입력으로 구조화하고,
-        통제 가능한 초안과 사람 리뷰, Golden Test Set, Jenkins 후보군을 통해
-        <strong>반복 가능한 릴리즈 QA 자산</strong>으로 전환했다는 점이다.
-      </p>
-    </div>
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid rgba(20, 24, 32, 0.12);
+        background: rgba(244, 241, 232, 0.92);
+        backdrop-filter: blur(14px);
+      }
 
-    <div class="footer">
-      <span>Resume · 1-page summary</span>
-      <span>Page 1 · Resume</span>
-    </div>
-  </section>
+      .nav,
+      .wrap {
+        width: min(1120px, calc(100% - 36px));
+        margin: 0 auto;
+      }
 
-  <section class="sheet portfolio-sheet" data-doc-role="portfolio" data-page-purpose="portfolio">
-    <div class="topline">
-      <div>
-        <div class="eyebrow">Portfolio Page 2 · AI-native Evidence Pack</div>
-        <h1>PAAR Case Study</h1>
-        <p class="subtitle">Problem → Approach → Action → Result / Reusable Asset</p>
-      </div>
-    </div>
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 66px;
+        gap: 20px;
+      }
 
-    <h2>PAAR Overview</h2>
-    <div class="grid-4">
-      <div class="card paar-card">
-        <span class="label">P · Problem</span>
-        <h3>릴리즈노트가 검증 기준이 되지 못함</h3>
-        <p>“정렬 오류 수정”, “화면 갱신 개선” 같은 문장은 고객 설명으로는 충분할 수 있으나, QA 입장에서는 어느 화면, 어떤 조건, 어떤 회귀 영역을 봐야 하는지 알기 어려웠다.</p>
-      </div>
-      <div class="card paar-card">
-        <span class="label">A · Approach</span>
-        <h3>AI를 변경 영향도 리뷰어로 사용</h3>
-        <p>릴리즈노트만 AI에 넣지 않고 SVN diff, 기존 TC, UI 액션로그, 고객 사용 시나리오를 함께 입력했다. AI의 역할은 정답 생성이 아니라 누락 질문과 테스트 후보 생성으로 제한했다.</p>
-      </div>
-      <div class="card paar-card">
-        <span class="label">A · Action</span>
-        <h3>스키마와 리뷰 게이트 설계</h3>
-        <p>고객용/내부 QA용 산출물을 분리하고, 입력 스키마와 출력 포맷을 고정했다. AI 출력은 Golden Test Set, 기존 회귀 TC, 사람 리뷰를 통해 검증했다.</p>
-      </div>
-      <div class="card paar-card">
-        <span class="label">R · Result</span>
-        <h3>반복 가능한 QA 자산화</h3>
-        <p>릴리즈 QA 템플릿, 누락 질문 패턴, 회귀 후보 분류 기준, Golden Test Set, Jenkins smoke/nightly regression 후보군으로 조직 자산화했다.</p>
-      </div>
-    </div>
+      .brand {
+        font-size: 0.96rem;
+        font-weight: 900;
+        text-decoration: none;
+      }
 
-    <h2>Input Sources</h2>
-    <table>
-      <thead>
-        <tr><th>Input</th><th>Purpose</th><th>Example</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>릴리즈노트</td><td>변경 의도와 고객 전달용 설명 확인</td><td>“검사 결과 리스트 정렬 오류 수정”</td></tr>
-        <tr><td>SVN diff</td><td>실제 변경 파일, 함수, 모듈 확인</td><td>정렬 함수, 결과 조회 로직, UI 갱신 코드</td></tr>
-        <tr><td>기존 TC</td><td>기존 검증 범위와 회귀 영역 확인</td><td>Smoke test, regression test, 수동 TC</td></tr>
-        <tr><td>UI 액션로그</td><td>사용자 동작과 화면 상태 변화 확인</td><td>필터 적용, 결과 갱신, 화면 재진입</td></tr>
-        <tr><td>고객/현장 맥락</td><td>장비 옵션, 고객 사용 습관, 기술지원 사례 반영</td><td>고객별 정렬 기준, export/report 사용 여부</td></tr>
-      </tbody>
-    </table>
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
 
-    <h2>Chosen Workflow</h2>
-    <pre><code>Release Note + SVN Diff + Existing TC + UI Action Logs + Field Context
-→ AI-assisted Impact Review
-→ Missing Questions
-→ Test Candidates
-→ Risk Summary
-→ Internal QA Checklist
-→ Customer-facing Release Note Draft
-→ Human Review
-→ Jenkins Smoke / Nightly Regression Candidate</code></pre>
+      .nav-links a {
+        text-decoration: none;
+      }
 
-    <div class="footer">
-      <span>Portfolio Evidence · PAAR</span>
-      <span>Page 2 · Portfolio</span>
-    </div>
-  </section>
+      .nav-links a:hover,
+      .brand:hover {
+        color: var(--green);
+      }
 
-  <section class="sheet portfolio-sheet" data-doc-role="portfolio" data-page-purpose="portfolio">
-    <div class="topline">
-      <div>
-        <div class="eyebrow">Portfolio Page 3 · Case Study Evidence</div>
-        <h1>Failures, Controls, and Assets</h1>
-        <p class="subtitle">터진 지점, 제외한 대안, 봉합 방식, 조직 자산화 결과</p>
-      </div>
-    </div>
+      .hero {
+        padding: 56px 0 24px;
+      }
 
-    <h2>What Broke</h2>
-    <div class="grid-2">
-      <div class="card soft"><h3>입력 맥락 부족 → 일반론 출력</h3><p>릴리즈노트가 짧고 추상적이면 AI도 “정상 동작 확인” 수준의 뻔한 답을 생성했다.</p></div>
-      <div class="card soft"><h3>SVN diff만으로는 업무 의미 부족</h3><p>코드상 변경은 작은 함수 수정처럼 보여도 실제로는 UI 표시, export, 고객 리포트, 설정 저장, 고객별 옵션 동작에 영향을 줄 수 있었다.</p></div>
-      <div class="card soft"><h3>기존 TC 품질에 AI가 종속</h3><p>기존 테스트케이스가 허술하거나 오래되면 AI가 그 한계를 그대로 재생산했다.</p></div>
-      <div class="card soft"><h3>고객용/내부용 산출물 혼재</h3><p>고객용 릴리즈노트는 간결해야 하고, 내부 QA 체크리스트는 공격적으로 상세해야 한다. 두 목적을 한 문서로 처리하면 둘 다 품질이 떨어졌다.</p></div>
-    </div>
+      .hero-sheet {
+        display: grid;
+        grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.72fr);
+        gap: 34px;
+        align-items: stretch;
+        min-height: 520px;
+        border: 1px solid var(--line);
+        border-top: 8px solid var(--navy);
+        background: var(--sheet);
+        box-shadow: var(--shadow);
+      }
 
-    <h2>Alternatives Rejected</h2>
-    <table>
-      <thead>
-        <tr><th>Alternative</th><th>Why Rejected</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>개발팀이 릴리즈노트를 더 상세히 작성</td><td>작성자 개인 역량 의존, 개발팀 부담 증가, 고객용/내부 QA 기준 혼재 문제.</td></tr>
-        <tr><td>QA가 매 릴리즈마다 diff를 수동 분석</td><td>정확도는 높을 수 있으나 확장성이 낮고 레거시 코드 지식 의존성이 커진다.</td></tr>
-        <tr><td>매 릴리즈 전체 회귀 테스트 수행</td><td>장비, 시간, 환경, 데이터 초기화 비용이 커서 기본 전략으로 삼기 어렵다.</td></tr>
-        <tr><td>릴리즈노트만 AI에 입력</td><td>입력 근거가 부족해 일반론적 체크리스트를 생성한다.</td></tr>
-        <tr><td>AI 출력을 바로 최종 산출물로 사용</td><td>QA와 고객 커뮤니케이션에서 책임 문제가 생길 수 있다.</td></tr>
-      </tbody>
-    </table>
+      .hero-copy {
+        padding: 42px;
+      }
 
-    <h2>Fixes and Controls</h2>
-    <div class="grid-2">
-      <div class="card"><h3>Output Separation</h3><p>고객용 릴리즈노트와 내부 QA 체크리스트를 분리했다. 고객용은 간결한 설명, 내부용은 조건/설정/export/report/회귀 위험까지 포함하는 검증 질문으로 구성했다.</p></div>
-      <div class="card"><h3>Question-first AI Usage</h3><p>AI에게 최종 답을 만들게 하지 않고, 누락 질문과 테스트 후보를 먼저 생성하게 했다.</p></div>
-      <div class="card"><h3>Fixed Input / Output Schema</h3><p>Release Note, Code Change, Existing TC, UI Context, Field Context를 고정 입력으로 만들고, 변경 요약, 영향 영역, 누락 질문, 테스트 후보, 회귀 위험을 고정 출력으로 만들었다.</p></div>
-      <div class="card"><h3>Golden Test Set + Jenkins Gate</h3><p>반복적으로 누락되는 질문은 Golden Test Set에 추가했다. 자동화 가능한 항목은 smoke 후보로, 장시간/환경 의존 항목은 nightly regression 후보로 분류했다.</p></div>
-    </div>
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--red);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
 
-    <h2>Example Before / After</h2>
-    <div class="grid-2">
-      <div class="card soft">
-        <h3>Before: Abstract Release Note</h3>
-        <pre><code>검사 결과 리스트 정렬 오류 수정</code></pre>
-        <p>이 문장만으로는 어느 화면, 어떤 정렬 기준, 어떤 조건, 어떤 회귀 위험을 봐야 하는지 알기 어렵다.</p>
-      </div>
-      <div class="card soft">
-        <h3>After: Reviewable QA Output</h3>
-        <pre><code>누락 확인 질문:
-1. 기본 정렬 기준은 무엇인가?
-2. 신규 검사 결과 추가 후에도 정렬이 유지되는가?
-3. 필터 적용/해제 후 정렬이 유지되는가?
-4. 화면 재진입 후 정렬이 유지되는가?
-5. export/report 결과에도 동일 정렬이 적용되는가?
-6. 고객별 옵션에 따라 정렬 기준이 달라지는가?</code></pre>
-      </div>
-    </div>
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
 
-    <h2>Assetized Lessons</h2>
-    <div class="asset-box">
-      <ul>
-        <li><strong>릴리즈 QA 입력 템플릿:</strong> 릴리즈노트, SVN diff, 기존 TC, UI 맥락, 고객 시나리오를 함께 수집하는 구조</li>
-        <li><strong>고객용/내부용 산출물 분리 기준:</strong> 고객 문서는 간결하게, 내부 QA 문서는 구체적이고 공격적으로 작성</li>
-        <li><strong>누락 질문 패턴:</strong> 정렬, 저장, 갱신, 필터, export, 권한, 네트워크, 재실행, 고객 옵션 검증 패턴</li>
-        <li><strong>Golden Test Set:</strong> AI가 자주 누락하거나 사람이 자주 놓치는 회귀 질문을 비교 가능한 테스트셋으로 축적</li>
-        <li><strong>Jenkins 후보 분류 기준:</strong> 빠른 smoke test와 장시간 nightly regression을 분리해 릴리즈 속도와 검증 신뢰도 균형 확보</li>
-      </ul>
-    </div>
+      h1 {
+        max-width: 780px;
+        margin-bottom: 18px;
+        font-size: 3.6rem;
+        line-height: 1.05;
+      }
 
-    <div class="footer">
-      <span>Portfolio Evidence · Failure / Control / Asset</span>
-      <span>Page 3 · Portfolio</span>
-    </div>
-  </section>
+      h2 {
+        margin-bottom: 14px;
+        font-size: 2rem;
+        line-height: 1.22;
+      }
 
+      h3 {
+        margin-bottom: 8px;
+        font-size: 1.02rem;
+        line-height: 1.35;
+      }
 
-  <section class="sheet portfolio-sheet" data-doc-role="portfolio" data-page-purpose="portfolio">
-    <div class="topline">
-      <div>
-        <div class="eyebrow">Portfolio Page 4 · Additional Improvement Plan</div>
-        <h1>Release QA Evolution Roadmap</h1>
-        <p class="subtitle">릴리즈노트를 문서에서 UI·함수·DB·콜그래프·AST·액션로그 기반 QA 자산으로 발전시키는 계획</p>
-      </div>
-    </div>
+      .lead {
+        max-width: 760px;
+        color: var(--muted);
+        font-size: 1.16rem;
+      }
 
-    <h2>Evolution Stages</h2>
-    <table>
-      <thead>
-        <tr><th>Stage</th><th>Goal</th><th>Assetized Output</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>초기</td>
-          <td>개발자가 릴리즈노트에 스크린샷을 넣고 변경 화면을 직접 확인하도록 시스템화</td>
-          <td>스크린샷 포함 개발자 릴리즈노트 템플릿, 변경 전/후 비교, 개발자 직접 확인 항목</td>
-        </tr>
-        <tr>
-          <td>중기</td>
-          <td>릴리즈노트가 누적되며 UI 에셋, 함수, DB 연결, 콜그래프의 암묵지를 포함</td>
-          <td>UI-screen/function/DB/query/customer-scenario metadata</td>
-        </tr>
-        <tr>
-          <td>후기</td>
-          <td>AST Tree와 콜그래프로 알고리즘 변경과 UI 변경점을 연결</td>
-          <td>Algorithm → Function → UI Event → DB I/O → Report/Export → Test Candidate mapping</td>
-        </tr>
-        <tr>
-          <td>발전</td>
-          <td>표준 QA 양식에 따라 수동 테스터용 TC와 Action Log 작성</td>
-          <td>Happy path, refresh, inspection, review, save/load, exception-flow TC 및 Action Log schema</td>
-        </tr>
-        <tr>
-          <td>구현 중</td>
-          <td>Action log 기반 UI regression automation과 self-healing</td>
-          <td>Action intent 기반 control 재탐색, selector mapping 업데이트 후보, human-reviewed self-healing rule</td>
-        </tr>
-      </tbody>
-    </table>
+      .hero-visual {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 18px;
+        border-left: 1px solid var(--line);
+        background: #f8faf7;
+        padding: 28px;
+      }
 
-    <h2>Target Architecture</h2>
-    <pre><code>텍스트 릴리즈노트
-→ 스크린샷 포함 개발자 확인
-→ UI / 함수 / DB / 콜그래프 메타데이터 누적
-→ AST Tree + 콜그래프 기반 변경 영향 추적
-→ 표준 QA 양식 기반 TC / Action Log 작성
-→ Action Log 기반 UI regression automation
-→ Human-reviewed self-healing</code></pre>
+      .cycle-map {
+        display: grid;
+        gap: 10px;
+      }
 
-    <h2>Why This Matters</h2>
-    <div class="asset-box">
-      <p>
-        이 개선안의 목적은 릴리즈노트를 더 자세히 쓰게 하는 것이 아니다.
-        릴리즈노트를 UI, 함수, DB, 콜그래프, AST, 테스트케이스, 액션로그를 연결하는
-        <strong>변경 영향 추적 자산</strong>으로 발전시키는 것이다.
-      </p>
-      <p>
-        결과적으로 수동 QA는 일회성 확인 작업으로 끝나지 않고, 이후 UI regression automation과
-        self-healing의 학습 입력으로 재사용된다.
-      </p>
-    </div>
+      .cycle-node {
+        border: 1px solid rgba(20, 24, 32, 0.16);
+        background: #ffffff;
+        padding: 12px;
+      }
 
-    <h2>Self-healing Control Principle</h2>
-    <div class="grid-2">
-      <div class="card soft">
-        <h3>Automation</h3>
-        <p>기존 selector 실패 시 screen, label, nearby control, action intent, expected state를 기준으로 후보 control을 재탐색한다.</p>
-      </div>
-      <div class="card soft">
-        <h3>Human Review</h3>
-        <p>self-healing 결과를 즉시 확정하지 않고, selector mapping 업데이트 후보를 생성한 뒤 사람 리뷰를 거쳐 rule을 갱신한다.</p>
-      </div>
-    </div>
+      .cycle-node strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 0.92rem;
+      }
 
-    <div class="footer">
-      <span>Portfolio Evidence · Additional Improvement Plan</span>
-      <span>Page 4 · Portfolio</span>
-    </div>
-  </section>
+      .cycle-node span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
 
+      .metric-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
 
-  <section class="detail" id="detail" data-doc-role="detail" data-detail-default="collapsed" data-source-md="release_qa_detail.md" data-policy="CENTRAL_DOCUMENT_POLICY.md">
-    <div class="topline">
-      <div>
-        <div class="eyebrow">Collapsed Detail · Markdown-synced Evidence</div>
-        <h1>상세보기</h1>
-        <p class="subtitle">상세 근거는 기본적으로 접어두며, 사용자 또는 검토에 필요한 사람만 열어볼 수 있습니다. 원본은 release_qa_detail.md입니다.</p>
-        <div class="toc">
-          <a href="release_qa_detail.md">Markdown 원본</a>
-          <a href="CENTRAL_DOCUMENT_POLICY.md">중앙 문서 정책</a>
+      .metric {
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 12px;
+      }
+
+      .metric b {
+        display: block;
+        color: var(--green);
+        font-size: 1.35rem;
+        line-height: 1;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        border: 1px solid var(--navy);
+        padding: 10px 16px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .button.primary {
+        background: var(--navy);
+        color: #fff;
+      }
+
+      .button.secondary {
+        background: #fff;
+      }
+
+      .section {
+        padding: 42px 0;
+      }
+
+      .section-panel {
+        border: 1px solid var(--line);
+        background: var(--sheet);
+        padding: 30px;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 0.88fr 1.12fr;
+        gap: 28px;
+      }
+
+      .problem-grid,
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .problem-card,
+      .portfolio-card,
+      .step-card {
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 20px;
+      }
+
+      .problem-card {
+        border-top: 5px solid var(--red);
+      }
+
+      .portfolio-card {
+        display: flex;
+        min-height: 292px;
+        flex-direction: column;
+        border-top: 5px solid var(--green);
+      }
+
+      .portfolio-card:nth-child(2) {
+        border-top-color: var(--blue);
+      }
+
+      .portfolio-card p,
+      .problem-card p,
+      .step-card p,
+      .section-panel p {
+        color: var(--muted);
+      }
+
+      .portfolio-card .button {
+        margin-top: auto;
+        width: fit-content;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin: 16px 0 20px;
+      }
+
+      .tag {
+        border: 1px solid rgba(47, 125, 102, 0.28);
+        background: rgba(47, 125, 102, 0.08);
+        color: #245f4e;
+        padding: 5px 8px;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .operating-model {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .step-card {
+        min-height: 154px;
+      }
+
+      .step-card b {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 14px;
+        background: var(--gold);
+        color: #1b1d22;
+      }
+
+      .resume-line {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .resume-line div {
+        border-left: 4px solid var(--navy);
+        background: #f9f8f2;
+        padding: 14px;
+      }
+
+      .resume-line strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .resume-line span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .footer {
+        padding: 34px 0 46px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 920px) {
+        .hero-sheet,
+        .split,
+        .problem-grid,
+        .portfolio-grid,
+        .operating-model,
+        .resume-line {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-visual {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+
+        h1 {
+          font-size: 2.7rem;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .nav {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 14px 0;
+        }
+
+        .nav-links {
+          width: 100%;
+          justify-content: space-between;
+          gap: 8px;
+        }
+
+        .hero {
+          padding-top: 24px;
+        }
+
+        .hero-copy,
+        .hero-visual,
+        .section-panel {
+          padding: 22px;
+        }
+
+        h1 {
+          font-size: 2.25rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="주요 메뉴">
+        <a class="brand" href="#top">AI-native Release Acceleration</a>
+        <div class="nav-links">
+          <a href="#thesis">Thesis</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#model">Operating Model</a>
         </div>
-      </div>
-    </div>
+      </nav>
+    </header>
 
-    <details class="detail-disclosure">
-      <summary>
-        <span>
-          상세보기 열기
-          <span class="detail-summary-copy">HTML 상세 본문은 release_qa_detail.md와 동기화된 근거 영역입니다.</span>
-        </span>
-      </summary>
-      <div class="detail-content">
-    <h1>상세보기: AI-assisted Release QA</h1>
-<h2>1.1 Why started</h2>
-<p>장비 소프트웨어 릴리즈 과정에서 가장 큰 문제는 릴리즈노트가 QA 검증 기준으로 사용하기에 충분히 구체적이지 않다는 점이었다.</p>
-<p>개발팀 입장에서 릴리즈노트는 보통 “무엇을 수정했다”를 설명하는 문서였다. 예를 들어 “검사 결과 리스트 정렬 오류 수정”, “설정 저장 오류 개선”, “특정 조건에서 화면 갱신 오류 수정”과 같은 문장은 고객 전달용 설명으로는 어느 정도 의미가 있지만, QA 입장에서는 곧바로 테스트 가능한 기준이 되지 않았다.</p>
-<p>QA가 실제로 확인해야 하는 질문은 훨씬 구체적이었다.</p>
-<ul>
-<li>어느 화면에서 발생하는 문제인가?</li>
-<li>어떤 입력 조건에서 재현되는가?</li>
-<li>정렬 기준은 무엇인가?</li>
-<li>필터 적용 후에도 동일하게 동작하는가?</li>
-<li>저장 후 재실행해도 유지되는가?</li>
-<li>export/report 결과에도 영향이 있는가?</li>
-<li>고객사별 설정이나 장비 옵션에 따라 동작이 달라지는가?</li>
-</ul>
-<p>즉 기존 릴리즈노트는 “설명문”이었고, QA에 필요한 것은 “검증 가능한 질문과 체크리스트”였다.</p>
-<p>이 프로젝트는 릴리즈노트, 코드 변경, 기존 테스트케이스, UI 동작 로그, 고객 사용 시나리오가 서로 분리되어 있던 문제를 해결하기 위해 시작했다. 목표는 AI를 단순 문서 작성 도구로 쓰는 것이 아니라, 릴리즈 변경사항을 테스트 가능한 질문, 누락 위험, 회귀 테스트 후보, 고객용/내부용 산출물로 전환하는 것이었다.</p>
-<hr>
-<h2>1.2 Input sources</h2>
-<p>AI-assisted Release QA workflow에서 사용한 입력은 단일 문서가 아니라 여러 출처의 업무 증거였다.</p>
-<table><thead><tr><th>Input</th><th>Purpose</th><th>Example</th></tr></thead><tbody><tr><td>릴리즈노트</td><td>변경 의도와 고객 전달용 설명 확인</td><td>“검사 결과 리스트 정렬 오류 수정”</td></tr><tr><td>SVN diff</td><td>실제 변경 파일, 함수, 모듈 확인</td><td>정렬 함수, 결과 조회 로직, UI 갱신 코드</td></tr><tr><td>함수 호출 관계</td><td>변경 함수의 영향 범위 확인</td><td>UI 표시, 데이터 조회, 리포트 출력</td></tr><tr><td>기존 TC</td><td>기존 검증 범위와 회귀 영역 확인</td><td>Smoke test, regression test, 수동 TC</td></tr><tr><td>UI 액션로그</td><td>사용자 동작과 화면 상태 변화 확인</td><td>필터 적용, 결과 갱신, 화면 재진입</td></tr><tr><td>고객/현장 맥락</td><td>장비 옵션, 고객 사용 습관, 기술지원 사례 반영</td><td>고객별 정렬 기준, export/report 사용 여부</td></tr></tbody></table>
-<p>입력 구조는 다음과 같이 정리했다.</p>
-<pre><code>Release Note:
-- 변경사항 설명
-- 고객 전달용 문장
-- 관련 이슈 또는 티켓
+    <main id="top">
+      <section class="hero wrap">
+        <div class="hero-sheet">
+          <div class="hero-copy">
+            <p class="eyebrow">Resume Summary · Portfolio Gateway</p>
+            <h1>AI로 기획, 개발, QA 사이의 출시 병목을 줄이는 사람</h1>
+            <p class="lead">
+              고객 니즈가 시장에서 확인된 뒤, PMF 가설, 구현, 테스트 계획, 회귀 검증, 리뷰가 직렬로
+              늘어지는 문제를 AI-native workflow로 병렬화합니다. 목표는 개발만 빠르게 하는 것이 아니라,
+              제품 변화가 시장에 도달하는 전체 출시 사이클을 줄이는 것입니다.
+            </p>
+            <div class="tag-row">
+              <span class="tag">AI-assisted QA</span>
+              <span class="tag">Release Acceleration</span>
+              <span class="tag">TDD Guardrail</span>
+              <span class="tag">Fixture Prototype</span>
+              <span class="tag">Regression Drafting</span>
+              <span class="tag">Agent Context Design</span>
+            </div>
+            <div class="actions">
+              <a class="button primary" href="portfolio/release-qa.html">Release QA 상세</a>
+              <a class="button secondary" href="portfolio/documentation-os.html">문서 운영 상세</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="AI-native 출시 루프">
+            <div class="cycle-map">
+              <div class="cycle-node"><strong>Customer Signal</strong><span>고객 니즈와 시장 신호를 PMF 가설로 정리</span></div>
+              <div class="cycle-node"><strong>Plan + Test Together</strong><span>개발 계획과 테스트 계획을 같은 입력에서 병렬 생성</span></div>
+              <div class="cycle-node"><strong>TDD Guardrail</strong><span>기존 기능은 테스트로 잠그고 실험 범위를 명확화</span></div>
+              <div class="cycle-node"><strong>Fixture Prototype</strong><span>시안과 데이터 fixture로 조직 간 해석 차이를 빠르게 확인</span></div>
+              <div class="cycle-node"><strong>Regression Draft</strong><span>신규 기능과 회귀 테스트 초안을 함께 생성</span></div>
+            </div>
+            <div class="metric-strip">
+              <div class="metric"><b>1</b><span>시장 가설</span></div>
+              <div class="metric"><b>2</b><span>구현/QA 병렬화</span></div>
+              <div class="metric"><b>3</b><span>릴리즈 검증 루프</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-Code Change:
-- 변경 파일
-- 변경 함수
-- 관련 모듈
-- 호출 관계
+      <section id="thesis" class="section wrap">
+        <div class="section-panel split">
+          <div>
+            <p class="eyebrow">Market Problem</p>
+            <h2>병목은 개발 속도 하나가 아니라 출시 해석 체계 전체에 있습니다.</h2>
+          </div>
+          <div class="problem-grid">
+            <article class="problem-card">
+              <h3>고객 니즈가 여러 번 번역됨</h3>
+              <p>고객 신호가 기획 문서로, 다시 개발 해석으로, 다시 QA 기준으로 변환되며 의미가 조금씩 달라집니다.</p>
+            </article>
+            <article class="problem-card">
+              <h3>QA와 리뷰가 뒤늦게 붙음</h3>
+              <p>개발이 끝난 뒤 테스트 범위, 중간 리뷰, 회귀 확인이 순차적으로 시작되면 제품 변화 사이클이 길어집니다.</p>
+            </article>
+            <article class="problem-card">
+              <h3>실험 시안이 늦게 보임</h3>
+              <p>fixture 기반 시안이 늦으면 조직 간 의견 차이와 누락 기능이 구현 후반에 발견됩니다.</p>
+            </article>
+            <article class="problem-card">
+              <h3>자동화가 출시 전략과 분리됨</h3>
+              <p>회귀 테스트와 신규 기능 테스트가 제품 가설과 연결되지 않으면 자동화는 속도보다 유지보수 비용이 됩니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
 
-Existing Test Cases:
-- 기존 smoke test
-- 기존 regression test
-- 관련 수동 테스트 항목
+      <section id="portfolio" class="section wrap">
+        <div class="section-panel">
+          <p class="eyebrow">Detailed Portfolio</p>
+          <h2>상세 포트폴리오</h2>
+          <div class="portfolio-grid">
+            <article class="portfolio-card">
+              <p class="eyebrow">Case 01</p>
+              <h3>AI-assisted Release QA</h3>
+              <p>
+                모호한 릴리즈 설명을 구조화된 AI 입력, 검토 가능한 QA 산출물, 회귀 테스트 후보,
+                고객용/내부용 문서로 분리한 사례입니다. 기존 A4 evidence-pack 디자인 톤을 유지한
+                상세 포트폴리오 페이지입니다.
+              </p>
+              <a class="button primary" href="portfolio/release-qa.html">상세 페이지 열기</a>
+            </article>
+            <article class="portfolio-card">
+              <p class="eyebrow">Case 02</p>
+              <h3>Documentation Operating System</h3>
+              <p>
+                AI 에이전트와 사람이 같은 문서 기준을 읽고 작업 맥락을 복원하도록 설계한 문서 운영 구조입니다.
+                ActiveDocs, 문서 권한 계층, 업데이트 라우팅, 에이전트 handoff를 포트폴리오 관점으로 정리했습니다.
+              </p>
+              <a class="button primary" href="portfolio/documentation-os.html">상세 페이지 열기</a>
+            </article>
+          </div>
+        </div>
+      </section>
 
-UI / Runtime Evidence:
-- UI 액션로그
-- 화면 상태 변화
-- 검사 결과 로그
-- 저장/불러오기 흐름
+      <section id="model" class="section wrap">
+        <div class="section-panel">
+          <p class="eyebrow">Operating Model</p>
+          <h2>빠른 실험 조직으로 바꾸는 작업 방식</h2>
+          <div class="operating-model">
+            <article class="step-card">
+              <b>1</b>
+              <h3>PMF 가설 정렬</h3>
+              <p>고객 니즈를 바로 기능 목록으로 번역하지 않고, 검증할 시장 가설과 실패 조건으로 정리합니다.</p>
+            </article>
+            <article class="step-card">
+              <b>2</b>
+              <h3>기존 기능 잠금</h3>
+              <p>기존 동작은 TDD와 회귀 기준으로 보호해 실험이 제품 신뢰도를 깨지 않게 합니다.</p>
+            </article>
+            <article class="step-card">
+              <b>3</b>
+              <h3>시안과 테스트 병렬화</h3>
+              <p>fixture 기반 시안, 개발 계획, 테스트 계획을 같은 맥락에서 동시에 만듭니다.</p>
+            </article>
+            <article class="step-card">
+              <b>4</b>
+              <h3>릴리즈 검증 자동 초안</h3>
+              <p>신규 기능 테스트와 리그레션 초안을 AI로 만들고 사람 리뷰와 실행 게이트로 통제합니다.</p>
+            </article>
+          </div>
+          <div class="resume-line">
+            <div><strong>Positioning</strong><span>AI-native QA / Release Acceleration / Agentic Workflow</span></div>
+            <div><strong>Strength</strong><span>기획, 개발, QA 문맥을 하나의 출시 루프로 연결</span></div>
+            <div><strong>Portfolio Focus</strong><span>빠른 실험, 검증 자동화, 문서 기반 handoff</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-Customer / Field Context:
-- 고객 사용 시나리오
-- 기술지원 사례
-- 장비 옵션 또는 설정 조건</code></pre>
-<hr>
-<h2>1.3 Chosen approach</h2>
-<p>선택한 접근은 LLM을 “릴리즈노트 작성자”가 아니라 “변경 영향도 리뷰어”로 사용하는 것이었다.</p>
-<p>단순히 릴리즈노트를 AI에게 넣고 문장을 다듬게 하는 방식은 배제했다. 그 방식은 문서 품질을 좋아 보이게 만들 수는 있지만, QA가 실제로 검증해야 하는 질문을 충분히 만들지 못했다.</p>
-<p>대신 AI의 역할을 다음과 같이 제한했다.</p>
-<ul>
-<li>AI는 최종 판단자가 아니라 초안 생성자다.</li>
-<li>AI는 정답을 확정하지 않고, 사람이 놓칠 수 있는 질문을 생성한다.</li>
-<li>AI는 고객용 문서와 내부 QA 문서를 분리해서 생성한다.</li>
-<li>AI 출력은 Golden Test Set, 기존 회귀 테스트, 사람 리뷰를 거쳐야 한다.</li>
-</ul>
-<p>이 접근의 핵심은 “AI가 답을 내는 것”이 아니라 “AI가 검증 질문을 생성하게 하는 것”이었다.</p>
-<p>예를 들어 릴리즈노트에 “검사 결과 리스트 정렬 오류 수정”이라고 되어 있다면, AI가 단순히 “정렬이 정상 동작하는지 확인”이라고 답하는 것은 가치가 낮다. 실제로 필요한 것은 다음과 같은 질문이다.</p>
-<pre><code>- 어느 화면의 검사 결과 리스트인가?
-- 기본 정렬 기준은 무엇인가?
-- 새 검사 결과가 추가된 뒤에도 정렬이 유지되는가?
-- 필터 적용 후 정렬이 유지되는가?
-- 화면을 닫았다 다시 열어도 정렬 기준이 유지되는가?
-- export/report 결과에도 동일한 정렬이 반영되는가?
-- 고객별 옵션이나 장비 설정에 따라 정렬 기준이 달라지는가?</code></pre>
-<p>workflow는 다음과 같이 설계했다.</p>
-<pre><code>Release Note + SVN Diff + Existing TC + UI Context
-→ AI-assisted Impact Review
-→ Missing Questions
-→ Test Candidates
-→ Risk Summary
-→ Internal QA Checklist
-→ Customer-facing Release Note Draft
-→ Human Review
-→ Jenkins Smoke / Nightly Regression Candidate</code></pre>
-<hr>
-<h2>1.4 What broke</h2>
-<p>초기 적용 과정에서는 여러 문제가 발생했다.</p>
-<h3>입력 맥락 부족</h3>
-<p>릴리즈노트가 “정렬 오류 수정”처럼 짧고 추상적이면 AI도 “정렬이 정상적으로 동작하는지 확인” 같은 뻔한 답을 생성했다. 이 경우 AI는 QA 업무를 도와주는 것이 아니라, 사람이 이미 알고 있는 말을 다시 정리하는 수준에 머물렀다.</p>
-<h3>SVN diff만으로는 업무 의미 부족</h3>
-<p>코드상으로는 특정 정렬 함수나 데이터 갱신 함수가 수정된 것처럼 보여도, 실제 영향은 UI 표시, export 결과, 고객 리포트, 설정 저장, 장비 옵션과 연결될 수 있었다. 코드 변경만 보고 영향 범위를 판단하면 과소평가가 발생할 수 있었다.</p>
-<h3>기존 TC 품질에 AI가 종속</h3>
-<p>기존 테스트케이스가 구체적이지 않거나 오래된 경우, AI는 그 한계를 그대로 따라갔다. 결과적으로 AI가 새로운 검증 관점을 제안하기보다 기존의 부족한 테스트 구조를 정중하게 재포장하는 문제가 있었다.</p>
-<h3>고객용/내부용 산출물 혼재</h3>
-<p>고객에게 전달할 릴리즈노트는 간결하고 안정적인 표현이 필요하지만, 내부 QA 체크리스트는 매우 구체적이고 공격적인 질문이 필요하다. 두 목적을 하나의 문서로 처리하려고 하면 고객용 문서는 지나치게 복잡해지고, 내부 QA 문서는 지나치게 약해졌다.</p>
-<h3>AI 출력 재현성</h3>
-<p>동일한 변경사항이라도 입력 방식이나 프롬프트가 조금 달라지면 어떤 실행에서는 export 검증 질문이 나오고, 다른 실행에서는 빠지는 식의 편차가 발생했다. QA 프로세스에서는 이런 편차가 위험했다.</p>
-<hr>
-<h2>1.5 Alternatives rejected</h2>
-<table><thead><tr><th>Alternative</th><th>Why rejected</th></tr></thead><tbody><tr><td>개발팀이 릴리즈노트를 더 상세히 작성</td><td>문서 품질이 작성자 개인 역량에 의존하고, 개발팀 부담이 커진다. 고객용 설명과 내부 QA 기준은 목적이 달라 하나의 문서로 해결하기 어렵다.</td></tr><tr><td>QA가 매 릴리즈마다 diff를 수동 분석</td><td>정확도는 높을 수 있으나 확장성이 낮고, 레거시 코드/모듈 지식에 대한 담당자 의존성이 커진다.</td></tr><tr><td>매 릴리즈 전체 회귀 테스트 수행</td><td>장비, 시간, 테스트 환경, 데이터 초기화 비용이 커서 기본 전략으로 삼기 어렵다. 변경 영향 기반 선별이 필요하다.</td></tr><tr><td>릴리즈노트만 AI에 입력</td><td>가장 빠르지만 입력 근거가 부족해 일반론적 체크리스트를 생성한다. 실제 변경 영향 분석이 되지 않는다.</td></tr><tr><td>AI 출력을 바로 최종 산출물로 사용</td><td>QA와 고객 커뮤니케이션에서 책임 문제가 생길 수 있다. AI 출력은 반드시 사람 리뷰와 검증 게이트를 거쳐야 한다.</td></tr></tbody></table>
-<hr>
-<h2>1.6 Fixes and controls</h2>
-<h3>고객용/내부용 산출물 분리</h3>
-<p>고객용 릴리즈노트는 변경 내용을 간결하고 안정적으로 설명하는 데 집중했다. 내부 QA 체크리스트는 화면, 조건, 설정, 저장/불러오기, export/report, 회귀 위험까지 포함하는 공격적인 검증 질문으로 구성했다.</p>
-<h3>Question-first AI usage</h3>
-<p>AI에게 최종 답변보다 누락 질문을 먼저 생성하게 했다. AI가 바로 테스트케이스를 확정하면 그럴듯하지만 위험한 결과가 나올 수 있다. 반대로 AI가 “확인해야 할 질문”을 만들게 하면, 사람 리뷰어가 그 질문을 기준으로 실제 테스트 범위를 확정할 수 있다.</p>
-<h3>입력 스키마 고정</h3>
-<pre><code>[입력 스키마]
-
-1. Release Note
-- 변경사항 설명
-- 관련 이슈
-- 고객 영향 여부
-
-2. Code Change
-- 변경 파일
-- 변경 함수
-- 관련 모듈
-- 호출 관계
-
-3. Existing Test Coverage
-- 기존 smoke test
-- 기존 regression test
-- 관련 수동 TC
-
-4. UI / Runtime Context
-- 관련 화면
-- 주요 사용자 액션
-- 저장/불러오기 여부
-- export/report 영향 여부
-
-5. Field Context
-- 고객 사용 시나리오
-- 기술지원 사례
-- 장비 옵션 또는 설정 조건</code></pre>
-<h3>출력 포맷 고정</h3>
-<pre><code>[출력 포맷]
-
-1. 변경 요약
-2. 영향 가능 영역
-3. 누락 확인 질문
-4. 테스트 후보
-5. 회귀 위험
-6. 개발팀 확인 필요 사항
-7. 내부 QA 체크리스트
-8. 고객용 릴리즈노트 초안</code></pre>
-<h3>Golden Test Set 사용</h3>
-<p>특정 유형의 변경에서 반드시 나와야 하는 검증 질문을 기준으로 삼았다. 예를 들어 UI 정렬 변경이라면 필터, 새 데이터 추가, 재실행, export/report, 고객별 옵션 영향을 확인해야 한다. AI가 이런 질문을 반복적으로 누락하면 Golden Test Set에 추가해 다음 검토 때 비교 기준으로 사용했다.</p>
-<h3>Jenkins smoke/nightly regression 연결</h3>
-<p>AI가 생성한 테스트 후보 중 즉시 자동화 가능한 항목은 smoke test 후보로, 시간이 오래 걸리거나 환경 의존성이 있는 항목은 nightly regression 후보로 분류했다. 모든 것을 한 번에 자동화하려 하지 않고, 반복 가능성과 신뢰도가 높은 항목부터 검증 자산으로 전환했다.</p>
-<hr>
-<h2>1.7 Assetized lessons</h2>
-<p>이 프로젝트에서 얻은 가장 큰 교훈은 AI를 최종 판단자로 쓰면 위험하지만, 누락 질문 생성기와 검토 초안 생성기로 쓰면 실무 가치가 높다는 점이었다.</p>
-<h3>자산화 결과</h3>
-<ol>
-<li><strong>릴리즈 QA 입력 템플릿</strong></li>
-</ol>
-<p>릴리즈노트를 그대로 검증하지 않고, 변경사항, 코드 diff, 기존 테스트케이스, UI 맥락, 고객 사용 시나리오를 함께 입력하는 구조를 만들었다.</p>
-<ol>
-<li><strong>고객용/내부용 산출물 분리 기준</strong></li>
-</ol>
-<p>고객용 문서는 안정적이고 간결해야 하며, 내부 QA 문서는 구체적이고 의심이 많아야 한다. 두 문서를 분리함으로써 고객 커뮤니케이션과 내부 검증 품질을 동시에 개선할 수 있었다.</p>
-<ol>
-<li><strong>누락 질문 패턴</strong></li>
-</ol>
-<p>정렬, 저장, 갱신, 필터, export, 권한, 네트워크, 재실행, 고객 옵션처럼 반복적으로 검증해야 하는 질문 패턴을 정리했다.</p>
-<ol>
-<li><strong>Golden Test Set</strong></li>
-</ol>
-<p>AI가 자주 누락하는 질문이나 사람이 자주 놓치는 회귀 영역을 테스트셋으로 남겼다. 이를 통해 AI 출력의 품질을 감각이 아니라 비교 가능한 기준으로 확인할 수 있게 했다.</p>
-<ol>
-<li><strong>Jenkins smoke/nightly regression 후보 분류 기준</strong></li>
-</ol>
-<p>모든 테스트를 한 번에 자동화하는 대신, 빠르게 반복할 smoke test와 장시간 검증이 필요한 nightly regression을 분리했다.</p>
-<p>정리하면, 이 프로젝트의 결과물은 단순한 AI 프롬프트가 아니었다. 릴리즈 QA 업무를 반복 가능한 입력, 통제 가능한 AI 출력, 사람 리뷰, 자동화 후보, 조직 테스트 자산으로 전환한 workflow였다.</p>
-<hr>
-<h2>1.8 Example before/after</h2>
-<h3>Before</h3>
-<pre><code>검사 결과 리스트 정렬 오류 수정</code></pre>
-<p>이 문장만으로는 QA가 검증 범위를 명확히 정의하기 어렵다. 실제로는 다음과 같은 정보가 빠져 있다.</p>
-<pre><code>- 어느 화면의 리스트인가?
-- 어떤 기준으로 정렬되어야 하는가?
-- 기존에는 어떤 순서로 잘못 표시되었는가?
-- 신규 검사 결과가 추가된 뒤에도 정렬이 유지되는가?
-- 필터 적용 후에도 정렬이 유지되는가?
-- 프로그램 재실행 후에도 정렬 기준이 유지되는가?
-- export/report 결과에도 동일한 정렬이 반영되는가?
-- 고객별 옵션에 따라 정렬 기준이 달라지는가?</code></pre>
-<h3>AI-assisted Review Output</h3>
-<pre><code>변경 요약:
-검사 결과 리스트의 표시 순서가 특정 조건에서 기대한 정렬 기준과 다르게 표시되는 문제를 수정한 것으로 판단됨.
-
-영향 가능 영역:
-- 검사 결과 리스트 UI
-- 데이터 갱신 후 리스트 표시
-- 필터/검색 적용 후 정렬
-- 검사 결과 export/report
-- 저장된 결과 재조회 화면
-- 고객별 정렬 옵션
-
-누락 확인 질문:
-1. 기본 정렬 기준은 무엇인가?
-2. 신규 검사 결과가 추가된 후에도 정렬이 유지되는가?
-3. 필터를 적용했다가 해제해도 정렬이 유지되는가?
-4. 프로그램 재실행 후 기존 결과 조회 시 정렬이 유지되는가?
-5. export/report 결과에도 동일한 정렬이 적용되는가?
-6. 고객별 옵션이나 장비 설정에 따라 정렬 기준이 달라지는가?
-
-테스트 후보:
-1. 기본 검사 결과 리스트 정렬 확인
-2. 신규 검사 결과 추가 후 정렬 유지 확인
-3. 필터 적용/해제 후 정렬 확인
-4. 화면 재진입 후 정렬 확인
-5. 프로그램 재실행 후 결과 재조회 정렬 확인
-6. export/report 정렬 확인
-
-개발팀 확인 필요 사항:
-- 정렬 기준 필드
-- DB 조회 단계에서 정렬하는지, UI 표시 단계에서 정렬하는지
-- export/report에도 동일 로직이 적용되는지
-- 고객 옵션별 분기 여부</code></pre>
-<h3>After: Internal QA Checklist</h3>
-<pre><code>[기본 동작]
-- 검사 결과 리스트가 기본 정렬 기준에 따라 표시되는지 확인
-- 동일 조건에서 반복 실행해도 정렬 결과가 일관적인지 확인
-
-[데이터 갱신]
-- 신규 검사 결과 추가 후 리스트 정렬이 유지되는지 확인
-- 결과 갱신 버튼 실행 후 정렬이 유지되는지 확인
-
-[필터/검색]
-- 필터 적용 후 정렬이 유지되는지 확인
-- 필터 해제 후 정렬이 유지되는지 확인
-- 검색 조건 변경 후 정렬이 유지되는지 확인
-
-[재진입/재실행]
-- 화면을 닫았다 다시 열어도 정렬이 유지되는지 확인
-- 프로그램 재실행 후 기존 결과 조회 시 정렬이 유지되는지 확인
-
-[외부 산출물]
-- export 결과의 정렬 순서 확인
-- report 출력 결과의 정렬 순서 확인
-
-[회귀 위험]
-- 기존 고객 데이터 조회 화면에서 정렬 회귀 여부 확인
-- 고객별 옵션이 있는 경우 옵션별 정렬 기준 확인</code></pre>
-<h3>After: Customer-facing Release Note</h3>
-<pre><code>검사 결과 리스트가 특정 조건에서 기대한 순서와 다르게 표시될 수 있는 문제를 수정했습니다. 결과 조회 및 화면 갱신 시 일관된 정렬 기준이 적용되도록 개선했습니다.</code></pre>
-<p>이 before/after의 핵심은 릴리즈노트 문장을 예쁘게 바꾸는 것이 아니다. 추상적인 변경 설명을 QA가 실행 가능한 질문과 체크리스트로 변환하고, 고객용 설명과 내부 검증 기준을 분리한 것이다.</p>
-<hr>
-<h2>1.9 Additional improvement plan: 릴리즈 QA 자산의 진화</h2>
-<p>이 workflow는 단순히 릴리즈노트를 AI로 요약하는 수준에서 끝나지 않는다. 목표는 릴리즈노트, UI 에셋, 함수, DB 연결, 콜그래프, AST Tree, 액션로그를 단계적으로 연결하여 “변경사항이 실제 사용자 화면과 테스트케이스까지 어떻게 이어지는지” 추적 가능한 릴리즈 QA 자산으로 발전시키는 것이다.</p>
-<h3>초기 단계: 개발자 직접 확인을 시스템화</h3>
-<p>초기 단계에서는 개발자가 릴리즈노트에 스크린샷을 직접 첨부하고, 변경된 화면과 동작을 스스로 확인하도록 시스템화한다.</p>
-<p>기존에는 릴리즈노트가 텍스트 설명 중심이었기 때문에 QA가 변경 화면을 추측해야 했다. 이를 개선하기 위해 개발자가 수정한 UI, 변경 전/후 화면, 주요 설정값, 재현 조건을 릴리즈노트에 포함하도록 했다.</p>
-<p>이 단계의 목적은 “개발자가 문서를 더 예쁘게 쓰게 하는 것”이 아니라, QA가 변경사항을 추측하지 않도록 최소한의 시각적 근거와 확인 지점을 남기는 것이다.</p>
-<p>자산화 형태는 다음과 같다.</p>
-<pre><code>Developer Release Note Template
-- 변경 요약
-- 변경 화면 스크린샷
-- 변경 전/후 비교
-- 재현 조건
-- 영향 가능 화면
-- 개발자 직접 확인 항목
-- QA 추가 확인 필요 항목</code></pre>
-<h3>중기 단계: 릴리즈노트가 UI 에셋, 함수, DB 연결, 콜그래프의 암묵지를 포함</h3>
-<p>릴리즈노트가 누적되면 단순 변경 기록이 아니라 암묵지를 포함한 지식 자산이 된다.</p>
-<p>예를 들어 특정 UI 화면이 어떤 함수와 연결되어 있는지, 그 함수가 어떤 DB 테이블 또는 설정값을 참조하는지, 어떤 고객 시나리오에서 자주 문제가 발생하는지에 대한 정보가 릴리즈노트와 함께 쌓인다.</p>
-<p>이 단계에서는 릴리즈노트를 단순 문서로 보지 않고, UI 에셋, 함수, DB 연결, 콜그래프를 연결하는 메타데이터 레이어로 사용한다.</p>
-<pre><code>Release Note Metadata
-- UI screen / component
-- Related function
-- Related DB table / query
-- Related configuration
-- Related customer scenario
-- Related previous defect
-- Related regression test</code></pre>
-<p>이렇게 누적된 릴리즈노트는 이후 AI-assisted impact review의 중요한 입력이 된다. AI는 더 이상 짧은 문장만 보는 것이 아니라, 과거 변경 이력과 UI-함수-DB 연결 맥락을 함께 참고할 수 있다.</p>
-<h3>후기 단계: AST Tree와 콜그래프로 알고리즘 변경과 UI 변경점을 연결</h3>
-<p>후기 단계에서는 AST Tree와 콜그래프를 사용해 알고리즘 변경과 UI 변경점을 묶을 수 있게 한다.</p>
-<p>기존에는 알고리즘 변경과 UI 영향이 분리되어 보였다. 예를 들어 내부 검사 알고리즘, 정렬 로직, 데이터 집계 방식, 캐시 갱신 방식이 바뀌어도 실제로 어느 UI 화면, 어느 리포트, 어느 저장/로드 흐름에 영향을 주는지는 담당자 경험에 의존하는 경우가 많았다.</p>
-<p>AST Tree와 콜그래프를 활용하면 변경된 함수가 어떤 상위 기능과 연결되는지, 어떤 UI 이벤트에서 호출되는지, 어떤 DB I/O 또는 리포트 출력으로 이어지는지 추적할 수 있다.</p>
-<pre><code>Algorithm Change
-→ Changed Function
-→ Call Graph
-→ UI Event / Screen
-→ DB Read / Write
-→ Report / Export
-→ Test Candidate</code></pre>
-<p>이 단계의 목표는 “코드가 바뀌었다”를 “사용자 화면과 테스트 후보가 바뀌었다”로 연결하는 것이다.</p>
-<h3>발전 단계: 표준화된 QA 양식 기반 TC와 Action Log 작성</h3>
-<p>다음 발전 단계는 표준화된 QA 양식에 따라 수동 테스터를 위한 테스트케이스와 액션로그를 작성하는 것이다.</p>
-<p>이때 테스트케이스는 단순 해피패스만 포함하지 않는다. 장비 소프트웨어에서 반복적으로 문제가 되는 보편적인 예외 흐름을 포함해야 한다.</p>
-<p>포함할 기본 흐름은 다음과 같다.</p>
-<pre><code>Standard QA Flow
-- Happy path
-- 갱신 / refresh
-- 검사 / inspection
-- 리뷰 / review
-- 저장 / save
-- 로드 / load
-- 화면 재진입
-- 프로그램 재실행
-- 필터 적용 / 해제
-- 설정 변경 후 복구
-- export / report
-- 네트워크 또는 DB 연결 예외</code></pre>
-<p>테스트케이스는 사람이 실행할 수 있어야 하고, 동시에 이후 자동화가 읽을 수 있는 action log로 남아야 한다.</p>
-<pre><code>Action Log Schema
-- timestamp
-- screen
-- control
-- action
-- input value
-- expected state
-- actual state
-- result
-- screenshot reference
-- related function / module</code></pre>
-<p>이 구조를 만들면 수동 테스트가 일회성 작업으로 끝나지 않는다. 사람이 수행한 테스트 흐름이 이후 UI regression automation의 입력 데이터가 된다.</p>
-<h3>구현 중: Action log 기반 UI regression automation과 self-healing</h3>
-<p>현재 구현 방향은 action log를 보는 UI regression automation과 self-healing이다.</p>
-<p>기존 UI 자동화는 selector 변경, 화면 로딩 지연, 버튼 위치 변경, DevExpress/WPF control 구조 변경에 취약하다. 따라서 단순 selector 기반 자동화만으로는 장기 유지보수가 어렵다.</p>
-<p>이를 해결하기 위해 action log를 기준으로 “사용자가 어떤 화면에서 어떤 의도로 어떤 동작을 했는지”를 기록하고, 자동화는 이 의도와 상태 변화를 기준으로 UI를 재탐색한다.</p>
-<p>self-healing의 방향은 다음과 같다.</p>
-<pre><code>Self-healing UI Regression
-1. 기존 selector로 control 탐색
-2. 실패 시 screen / label / nearby control / action intent 기반 재탐색
-3. 후보 control의 상태와 expected state 비교
-4. 성공 시 selector mapping 업데이트 후보 생성
-5. 사람 리뷰 후 selector rule 갱신</code></pre>
-<p>여기서 중요한 점은 self-healing을 완전 자동으로 확정하지 않는 것이다. UI 자동화의 self-healing은 잘못된 control을 선택할 위험이 있기 때문에, 자동 복구 후보를 만들고 사람 리뷰를 거쳐 rule을 갱신하는 방식이 더 안전하다.</p>
-<h3>추가 개선안의 핵심</h3>
-<p>이 개선안의 핵심은 릴리즈 QA를 다음 단계로 진화시키는 것이다.</p>
-<pre><code>텍스트 릴리즈노트
-→ 스크린샷 포함 개발자 확인
-→ UI / 함수 / DB / 콜그래프 메타데이터 누적
-→ AST Tree + 콜그래프 기반 변경 영향 추적
-→ 표준 QA 양식 기반 TC / Action Log 작성
-→ Action Log 기반 UI regression automation
-→ Human-reviewed self-healing</code></pre>
-<p>결과적으로 릴리즈노트는 단순 문서가 아니라, 코드 변경과 UI 동작, 테스트케이스, 자동화, 회귀 위험을 연결하는 조직 지식 자산으로 발전한다.</p>
-      </div>
-    </details>
-  </section>
-
-</body>
+    <footer class="footer wrap">
+      <p>GitHub: <a href="https://github.com/prefix9671">prefix9671</a> · Portfolio source policy: <a href="CENTRAL_DOCUMENT_POLICY.md">CENTRAL_DOCUMENT_POLICY.md</a></p>
+    </footer>
+  </body>
 </html>

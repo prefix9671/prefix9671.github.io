@@ -9,16 +9,19 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 
 ## Document Structure
 
-- `index.html`: published resume/portfolio HTML.
-- `release_qa_detail.md`: Markdown source for the collapsed detail evidence section.
+- `index.html`: market-facing resume summary and portfolio gateway.
+- `portfolio/release-qa.html`: detailed Release QA portfolio page using the original evidence-pack design tone.
+- `portfolio/documentation-os.html`: detailed documentation operating system portfolio page.
+- `release_qa_detail.md`: Markdown source for the collapsed Release QA detail evidence section.
 - `CENTRAL_DOCUMENT_POLICY.md`: central policy for page roles, detail disclosure, and Markdown/HTML sync.
-- `portfolio/`: neutralized portfolio drafts and structure-only case material.
+- `portfolio/automation-doc-structure/`: neutralized structure-only source material for the documentation portfolio page.
 - `.nojekyll`: keeps GitHub Pages from running Jekyll processing.
 
 ## Policy Summary
 
-- Page 1 is the resume-oriented one-page summary.
-- Page 2 and later are portfolio evidence pages.
-- Detail evidence is collapsed by default and opened only by readers who need it.
-- Detail evidence edits start in `release_qa_detail.md`, then the HTML detail block is synchronized before publishing.
+- `index.html` explains the market problem and links to detailed portfolio pages.
+- `portfolio/release-qa.html` preserves the original `AI-native Resume Evidence Pack - Release QA` detailed page tone.
+- `portfolio/documentation-os.html` presents the document structure case as a detailed portfolio page.
+- Release QA detail evidence is collapsed by default and opened only by readers who need it.
+- Release QA evidence edits start in `release_qa_detail.md`, then the HTML detail block is synchronized before publishing.
 - Private-source portfolio drafts must copy structure and intent only, not source content.
