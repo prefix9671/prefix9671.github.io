@@ -43,6 +43,7 @@
     .metric strong { display:block; font-size:19px; color:#1f6f57; }
     .metric span { font-size:9.8px; color:#4b5563; }
     .warning { border-left:5px solid #b45309; background:#fffbeb; padding:10px; }
+    .info { border-left:5px solid #496b9d; background:#f4f7fb; padding:10px; }
     .footer { position:absolute; left:13mm; right:13mm; bottom:8mm; border-top:1px solid #e5e7eb; padding-top:6px; font-size:9px; color:#6b7280; display:flex; justify-content:space-between; }
     .back { display:inline-block; margin-bottom:10px; font-size:10px; text-decoration:none; border:1px solid #d1d5db; border-radius:999px; padding:4px 8px; background:#fff; }
     @media print { body{background:#fff;} .sheet{margin:0;width:auto;} .back{display:none;} }
@@ -59,7 +60,7 @@
     <div class="tag-row"><span class="tag">Legacy WPF</span><span class="tag">DevExpress</span><span class="tag">SVN Traceability</span><span class="tag">AI-assisted Review</span><span class="tag">UI Observability</span><span class="tag">OCR Double Check</span><span class="tag">Nightly Regression</span></div>
   </div>
   <h2>1-page Summary</h2>
-  <div class="grid-2"><div class="card soft"><h3>Positioning</h3><p>문서 접근 제약과 낮은 테스트 가능성을 이유로 자동화를 포기하지 않고, 허용된 범위 안에서 변경 추적성과 관측성을 단계적으로 확보한 Release QA 사례.</p></div><div class="card soft"><h3>Operating Pattern</h3><p>Change Intent → AI Review → Traceable Release Scope → Static State Tests → Anchored UI Automation → OCR/Data Validation → Human Escalation.</p></div></div>
+  <div class="grid-2"><div class="card soft"><h3>Positioning</h3><p>문서 접근 제약과 낮은 테스트 가능성을 이유로 자동화를 포기하지 않고, 허용된 범위 안에서 변경 추적성과 관측성을 단계적으로 확보한 Release QA 사례.</p></div><div class="card soft"><h3>Operating Pattern</h3><p>Change Intent → AI Review → Traceable Release Scope → Static State Tests → Anchored UI Automation → OCR/Data Validation → Human Review Checkpoint.</p></div></div>
   <h2>Measured Outcome</h2>
   <div class="grid-3"><div class="metric"><strong>42%p → 6%p</strong><span>상태전이 관련 QA 패치 빌드 이슈 발생률</span></div><div class="metric"><strong>3일 → 1일</strong><span>전체 보고서 배포 전 Full Regression 소요시간</span></div><div class="metric"><strong>분기 2~3회</strong><span>P1 이상 기존 기능 영향 사전 검출</span></div></div>
   <h2>Core Statement</h2><div class="asset-box"><p>이 사례의 핵심은 “레거시 UI를 AI가 대신 클릭했다”가 아니다. 보안과 조직 정책을 우회하지 않으면서, 코드에 남은 변경 의도와 화면 상태를 검증 가능한 증거로 연결하고, 자동화가 읽을 수 없는 UI에 최소 관측 지점을 설계해 출시 전 회귀 검증을 반복 가능한 운영 체계로 만든 것이다.</p></div>
@@ -97,7 +98,8 @@
 → Release Note Agent 호출
 → 변경 범위와 연관 Jira / Review 참조
 → 상태전이 기반 정적 테스트
-→ QA Patch Build Gate
+→ QA Evidence Pack 생성
+→ Release Readiness Review
 → 조직 공용 지식으로 승격</code></pre>
   <h2>Why Frontend First</h2><p>전사 문서와 핵심 알고리즘을 한 번에 AI에 연결하는 대신, 상대적으로 외부 노출 위험이 낮고 기능 결과를 화면 상태로 확인할 수 있는 프론트엔드 변경부터 적용했다. 이는 보안 요구를 낮춘 것이 아니라, 승인 가능한 위험 범위에서 효과를 먼저 검증하기 위한 단계적 도입이었다.</p>
   <h2>Static State-transition Checks</h2>
@@ -107,8 +109,10 @@
     <tr><td>활성/비활성 조건 오류</td><td>조건식 변경에 따른 상태전이 테이블 검증</td><td>초기 상태, 입력 조건, 기대 상태, 실제 상태</td></tr>
     <tr><td>기능 추가 후 기존 경로 누락</td><td>연관 Jira·변경 의도·호출 경로 기반 회귀 후보 생성</td><td>변경 파일, 함수, 관련 화면, 기존 TC</td></tr>
   </tbody></table>
+  <h2>Release Readiness in a Non-CI Environment</h2>
+  <div class="info"><p><strong>자동화된 CI/CD 승인 게이트는 존재하지 않았다.</strong> 따라서 본 사례에서의 통제 지점은 Jenkins 차단 규칙이나 자동 배포 승인 기능이 아니라, 변경 의도·정적 테스트 결과·회귀 증거를 묶어 담당자가 릴리즈 가능 여부를 검토할 수 있도록 만든 <strong>수동 Release Readiness Review</strong>였다.</p><p>QA는 배포를 시스템적으로 승인하거나 차단하지 않았다. 대신 P1 이상 영향, 상태 불일치, OCR 신뢰도 저하와 같은 위험 신호를 근거와 함께 제시하고, 기존 책임 체계의 담당자가 보류·재검증·배포 여부를 결정하도록 했다.</p></div>
   <h2>Outcome</h2><div class="asset-box"><p>변경 의도와 실제 source diff를 같은 릴리즈 단위로 묶고, 반복적으로 발생하던 상태전이 결함을 정적 검증 후보로 전환했다. 그 결과 QA 패치 빌드에서 확인되던 관련 이슈 발생률이 <strong>42%p에서 6%p로 감소</strong>했다.</p><p>수치는 특정 적용 범위와 관찰 기간의 운영 결과이며, 전 제품·전 조직에 일반화하지 않고 해당 워크플로의 효과 지표로 사용했다.</p></div>
-  <h2>Control Principles</h2><div class="grid-2"><div class="card soft"><h3>AI is a reviewer, not an approver</h3><p>AI는 변경 영향과 누락 질문을 생성하지만, 배포 승인과 최종 테스트 범위 결정은 기존 책임 체계가 유지한다.</p></div><div class="card soft"><h3>Trace before automate</h3><p>자동화 스크립트보다 먼저 변경 의도, 화면, 함수, Jira, 테스트 증거가 추적 가능한지 확인한다.</p></div></div>
+  <h2>Control Principles</h2><div class="grid-2"><div class="card soft"><h3>AI is a reviewer, not an approver</h3><p>AI는 변경 영향과 누락 질문을 생성하지만, 배포 판단과 최종 테스트 범위 결정은 기존 책임 체계가 유지한다.</p></div><div class="card soft"><h3>Evidence before decision</h3><p>자동 승인 기능을 가정하지 않고, 변경 의도·화면·함수·Jira·테스트 증거가 검토 가능한 상태인지 먼저 확인한다.</p></div></div>
   <div class="footer"><span>Portfolio Evidence · Traceability / Static Tests</span><span>Page 3 · Guardrails</span></div>
 </section>
 
@@ -153,7 +157,7 @@
   <div class="grid-2"><div class="card"><h3>Independent OCR Paths</h3><p>오픈소스 OCR과 자사 AOI 검사기 OCR을 함께 사용해 단일 엔진의 인식 오류가 최종 판정으로 바로 이어지지 않도록 했다.</p></div><div class="card"><h3>Confidence-based Escalation</h3><p>두 결과가 불일치하거나 신뢰도가 낮은 표본은 자동 확정하지 않고 약 3% 수준의 샘플 사유와 증거를 사람에게 전달했다.</p></div><div class="card"><h3>Before / After Consistency</h3><p>패치 전후 동일 조건에서 보고서 값, 선택 상태, 갱신 결과를 비교해 기능 추가가 기존 결과를 변경하지 않았는지 검증했다.</p></div><div class="card"><h3>Evidence Retention</h3><p>실행 단계, 조건, 스크린샷, OCR 결과, 판정 사유를 남겨 자동화 실패와 제품 결함을 구분할 수 있게 했다.</p></div></div>
   <h2>Operational Result</h2>
   <div class="grid-3"><div class="metric"><strong>66% 감소</strong><span>전체 보고서 Full Regression: 3일에서 1일</span></div><div class="metric"><strong>야간 실행</strong><span>고객사별 커스텀 패치를 퇴근 후 자동 검증</span></div><div class="metric"><strong>P1 사전 검출</strong><span>분기별 약 2~3회 기존 기능 치명 영향 확인</span></div></div>
-  <h2>Release Control Boundary</h2><div class="asset-box"><ul><li>자동화는 배포를 승인하지 않는다.</li><li>조건 동일성이 깨지면 결과를 확정하지 않는다.</li><li>OCR 불일치와 낮은 신뢰도는 사람 검토로 전환한다.</li><li>고객별 패치는 공통 기능과 고객 설정 영향도를 함께 검증한다.</li><li>기존 기능의 P1 이상 영향이 발견되면 릴리즈를 차단하고 재검증한다.</li></ul></div>
+  <h2>Release Control Boundary</h2><div class="asset-box"><ul><li>자동화는 배포를 승인하지 않는다.</li><li>자동화된 CI/CD 차단 게이트가 있다는 주장을 하지 않는다.</li><li>조건 동일성이 깨지면 결과를 확정하지 않는다.</li><li>OCR 불일치와 낮은 신뢰도는 사람 검토로 전환한다.</li><li>P1 이상 영향이 발견되면 근거를 담당자에게 전달하고 수동 보류·재검증 결정을 요청한다.</li></ul></div>
   <h2>Assetized Outputs</h2><table><thead><tr><th>Asset</th><th>Reusable Value</th></tr></thead><tbody>
     <tr><td>SVN Change Intent Template</td><td>변경 의도, 관련 이슈, 영향 화면, 테스트 후보를 동일 단위로 기록</td></tr>
     <tr><td>Static State-transition Rules</td><td>버튼 방향, 활성 조건, 갱신 경로 등 반복 결함 조기 탐지</td></tr>
@@ -161,7 +165,7 @@
     <tr><td>OCR Cross-validation Pipeline</td><td>이미지 렌더링 데이터의 이중 인식과 불확실성 에스컬레이션</td></tr>
     <tr><td>Nightly Customer Patch Regression</td><td>고객별 커스텀 배포 전 공통 기능 영향도 검증</td></tr>
   </tbody></table>
-  <h2>Careful Claim</h2><div class="warning"><p>이 사례는 모든 레거시 WPF 화면을 완전 자동화했다는 주장이 아니다. 제품 코드 변경과 테스트 후커 도입이 제한된 환경에서, 검증 가능한 화면과 보고서 경로부터 자동화하고 불확실한 결과는 사람에게 되돌리는 방식으로 출시 리스크와 반복 시간을 줄였다는 사례다.</p></div>
+  <h2>Careful Claim</h2><div class="warning"><p>이 사례는 모든 레거시 WPF 화면을 완전 자동화했다는 주장이 아니다. 또한 자동화된 승인 게이트를 구축했다는 주장도 아니다. 제품 코드 변경과 테스트 후커 도입이 제한된 환경에서, 검증 가능한 화면과 보고서 경로부터 자동화하고 불확실한 결과는 사람에게 되돌려 수동 릴리즈 판단의 근거와 반복 가능성을 높였다는 사례다.</p></div>
   <div class="footer"><span>Portfolio Evidence · E2E / Operations</span><span>Page 5 · Result</span></div>
 </section>
 </body>
