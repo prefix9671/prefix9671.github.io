@@ -1,594 +1,112 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="AI-native QA / Release Engineer 포트폴리오">
-    <meta name="author" content="시우 조">
-    <meta property="og:title" content="AI-native QA / Release Engineer">
-    <meta property="og:description" content="릴리즈 병목을 코드·테스트·문서·회귀 자동화로 줄이는 포트폴리오입니다.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://prefix9671.github.io/">
-    <title>AI-native QA / Release Engineer</title>
-    <style>
-      :root {
-        color-scheme: light;
-        --paper: #f4f1e8;
-        --sheet: #ffffff;
-        --ink: #141820;
-        --muted: #626a76;
-        --line: #d8d2c2;
-        --navy: #1f2d3d;
-        --green: #2f7d66;
-        --red: #b5533f;
-        --gold: #d9a441;
-        --blue: #496b9d;
-        --shadow: 0 18px 40px rgba(20, 24, 32, 0.09);
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        margin: 0;
-        background: var(--paper);
-        color: var(--ink);
-        font-family: "Pretendard", "Noto Sans KR", "Segoe UI", Arial, sans-serif;
-        line-height: 1.58;
-      }
-
-      a {
-        color: inherit;
-      }
-
-      .site-header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        border-bottom: 1px solid rgba(20, 24, 32, 0.12);
-        background: rgba(244, 241, 232, 0.92);
-        backdrop-filter: blur(14px);
-      }
-
-      .nav,
-      .wrap {
-        width: min(1120px, calc(100% - 36px));
-        margin: 0 auto;
-      }
-
-      .nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        min-height: 66px;
-        gap: 20px;
-      }
-
-      .brand {
-        font-size: 0.96rem;
-        font-weight: 900;
-        text-decoration: none;
-      }
-
-      .nav-links {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 16px;
-        color: var(--muted);
-        font-size: 0.92rem;
-      }
-
-      .nav-links a {
-        text-decoration: none;
-      }
-
-      .nav-links a:hover,
-      .brand:hover {
-        color: var(--green);
-      }
-
-      .hero {
-        padding: 56px 0 24px;
-      }
-
-      .hero-sheet {
-        display: grid;
-        grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.72fr);
-        gap: 34px;
-        align-items: stretch;
-        min-height: 470px;
-        border: 1px solid var(--line);
-        border-top: 8px solid var(--navy);
-        background: var(--sheet);
-        box-shadow: var(--shadow);
-      }
-
-      .hero-copy {
-        padding: 38px;
-      }
-
-      .eyebrow {
-        margin: 0 0 12px;
-        color: var(--red);
-        font-size: 0.78rem;
-        font-weight: 900;
-        letter-spacing: 0;
-        text-transform: uppercase;
-      }
-
-      h1,
-      h2,
-      h3,
-      p {
-        margin-top: 0;
-      }
-
-      h1 {
-        max-width: 780px;
-        margin-bottom: 12px;
-        font-size: 2.08rem;
-        line-height: 1.12;
-        letter-spacing: 0;
-      }
-
-      .hero-statement {
-        max-width: 780px;
-        margin-bottom: 18px;
-        color: var(--navy);
-        font-size: 1.52rem;
-        font-weight: 900;
-        line-height: 1.28;
-        letter-spacing: 0;
-      }
-
-      .keep {
-        white-space: nowrap;
-      }
-
-      h2 {
-        margin-bottom: 14px;
-        font-size: 2rem;
-        line-height: 1.22;
-      }
-
-      h3 {
-        margin-bottom: 8px;
-        font-size: 1.02rem;
-        line-height: 1.35;
-      }
-
-      .lead {
-        max-width: 760px;
-        color: var(--muted);
-        font-size: 1rem;
-        line-height: 1.7;
-      }
-
-      .hero-visual {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 18px;
-        border-left: 1px solid var(--line);
-        background: #f8faf7;
-        padding: 26px;
-      }
-
-      .cycle-map {
-        display: grid;
-        gap: 10px;
-      }
-
-      .cycle-node {
-        border: 1px solid rgba(20, 24, 32, 0.16);
-        background: #ffffff;
-        padding: 12px;
-      }
-
-      .cycle-node strong {
-        display: block;
-        margin-bottom: 2px;
-        font-size: 0.92rem;
-      }
-
-      .cycle-node span {
-        color: var(--muted);
-        font-size: 0.84rem;
-      }
-
-      .metric-strip {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-
-      .metric {
-        border: 1px solid var(--line);
-        background: #fff;
-        padding: 12px;
-      }
-
-      .metric b {
-        display: block;
-        color: var(--green);
-        font-size: 1.35rem;
-        line-height: 1;
-      }
-
-      .metric span {
-        color: var(--muted);
-        font-size: 0.78rem;
-      }
-
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 28px;
-      }
-
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 44px;
-        border: 1px solid var(--navy);
-        padding: 10px 16px;
-        font-weight: 800;
-        text-decoration: none;
-      }
-
-      .button.primary {
-        background: var(--navy);
-        color: #fff;
-      }
-
-      .button.secondary {
-        background: #fff;
-      }
-
-      .section {
-        padding: 42px 0;
-      }
-
-      .section-panel {
-        border: 1px solid var(--line);
-        background: var(--sheet);
-        padding: 30px;
-      }
-
-      .split {
-        display: grid;
-        grid-template-columns: 0.88fr 1.12fr;
-        gap: 28px;
-      }
-
-      .problem-grid,
-      .portfolio-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-      }
-
-      .problem-card,
-      .portfolio-card,
-      .step-card {
-        border: 1px solid var(--line);
-        background: #fff;
-        padding: 20px;
-      }
-
-      .problem-card {
-        border-top: 5px solid var(--red);
-      }
-
-      .portfolio-card {
-        display: flex;
-        min-height: 292px;
-        flex-direction: column;
-        border-top: 5px solid var(--green);
-      }
-
-      .portfolio-card:nth-child(2) {
-        border-top-color: var(--blue);
-      }
-
-      .portfolio-card p,
-      .problem-card p,
-      .step-card p,
-      .section-panel p {
-        color: var(--muted);
-      }
-
-      .portfolio-card .button {
-        margin-top: auto;
-        width: fit-content;
-      }
-
-      .tag-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-        margin: 16px 0 20px;
-      }
-
-      .tag {
-        border: 1px solid rgba(47, 125, 102, 0.28);
-        background: rgba(47, 125, 102, 0.08);
-        color: #245f4e;
-        padding: 5px 8px;
-        font-size: 0.78rem;
-        font-weight: 800;
-      }
-
-      .operating-model {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px;
-        margin-top: 20px;
-      }
-
-      .step-card {
-        min-height: 154px;
-      }
-
-      .step-card b {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        height: 30px;
-        margin-bottom: 14px;
-        background: var(--gold);
-        color: #1b1d22;
-      }
-
-      .resume-line {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 12px;
-        margin-top: 22px;
-      }
-
-      .resume-line div {
-        border-left: 4px solid var(--navy);
-        background: #f9f8f2;
-        padding: 14px;
-      }
-
-      .resume-line strong {
-        display: block;
-        margin-bottom: 4px;
-      }
-
-      .resume-line span {
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-
-      .footer {
-        padding: 34px 0 46px;
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-
-      @media (max-width: 920px) {
-        .hero-sheet,
-        .split,
-        .problem-grid,
-        .portfolio-grid,
-        .operating-model,
-        .resume-line {
-          grid-template-columns: 1fr;
-        }
-
-        .hero-visual {
-          border-left: 0;
-          border-top: 1px solid var(--line);
-        }
-
-        h1 {
-          font-size: 1.82rem;
-        }
-
-        .hero-statement {
-          font-size: 1.32rem;
-        }
-      }
-
-      @media (max-width: 620px) {
-        .nav {
-          align-items: flex-start;
-          flex-direction: column;
-          padding: 14px 0;
-        }
-
-        .nav-links {
-          width: 100%;
-          justify-content: space-between;
-          gap: 8px;
-        }
-
-        .hero {
-          padding-top: 24px;
-        }
-
-        .hero-copy,
-        .hero-visual,
-        .section-panel {
-          padding: 22px;
-        }
-
-        h1 {
-          font-size: 1.55rem;
-        }
-
-        .hero-statement {
-          font-size: 1.16rem;
-        }
-
-        h2 {
-          font-size: 1.5rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <nav class="nav" aria-label="주요 메뉴">
-        <a class="brand" href="#top">AI-native QA / Release Engineer</a>
-        <div class="nav-links">
-          <a href="#thesis">Thesis</a>
-          <a href="#portfolio">Portfolio</a>
-          <a href="#model">Operating Model</a>
-        </div>
-      </nav>
-    </header>
-
-    <main id="top">
-      <section class="hero wrap">
-        <div class="hero-sheet">
-          <div class="hero-copy">
-            <p class="eyebrow">Resume Summary · Portfolio Gateway</p>
-            <h1>AI-native QA / Release Engineer</h1>
-            <p class="hero-statement">
-              <span>릴리즈 병목을</span>
-              <span class="keep">코드·테스트·문서·회귀</span>
-              <span class="keep">자동화로 줄이는 사람</span>
-            </p>
-            <p class="lead">
-              고객 니즈가 시장에서 확인된 뒤, PMF 가설, 구현, 테스트 계획, 회귀 검증, 리뷰가 직렬로
-              늘어지는 문제를 AI-native workflow로 병렬화합니다. 목표는 개발만 빠르게 하는 것이 아니라,
-              제품 변화가 시장에 도달하는 전체 출시 사이클을 줄이는 것입니다.
-            </p>
-            <div class="tag-row">
-              <span class="tag">AI-assisted QA</span>
-              <span class="tag">Release Acceleration</span>
-              <span class="tag">TDD Guardrail</span>
-              <span class="tag">Fixture Prototype</span>
-              <span class="tag">Regression Drafting</span>
-              <span class="tag">Agent Context Design</span>
-            </div>
-            <div class="actions">
-              <a class="button primary" href="portfolio/release-qa.html">Release QA 상세</a>
-              <a class="button secondary" href="portfolio/documentation-os.html">문서 운영 상세</a>
-            </div>
-          </div>
-          <div class="hero-visual" aria-label="AI-native 출시 루프">
-            <div class="cycle-map">
-              <div class="cycle-node"><strong>Customer Signal</strong><span>고객 니즈와 시장 신호를 PMF 가설로 정리</span></div>
-              <div class="cycle-node"><strong>Plan + Test Together</strong><span>개발 계획과 테스트 계획을 같은 입력에서 병렬 생성</span></div>
-              <div class="cycle-node"><strong>TDD Guardrail</strong><span>기존 기능은 테스트로 잠그고 실험 범위를 명확화</span></div>
-              <div class="cycle-node"><strong>Fixture Prototype</strong><span>시안과 데이터 fixture로 조직 간 해석 차이를 빠르게 확인</span></div>
-              <div class="cycle-node"><strong>Regression Draft</strong><span>신규 기능과 회귀 테스트 초안을 함께 생성</span></div>
-            </div>
-            <div class="metric-strip">
-              <div class="metric"><b>1</b><span>시장 가설</span></div>
-              <div class="metric"><b>2</b><span>구현/QA 병렬화</span></div>
-              <div class="metric"><b>3</b><span>릴리즈 검증 루프</span></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="thesis" class="section wrap">
-        <div class="section-panel split">
-          <div>
-            <p class="eyebrow">Market Problem</p>
-            <h2>병목은 개발 속도 하나가 아니라 출시 해석 체계 전체에 있습니다.</h2>
-          </div>
-          <div class="problem-grid">
-            <article class="problem-card">
-              <h3>고객 니즈가 여러 번 번역됨</h3>
-              <p>고객 신호가 기획 문서로, 다시 개발 해석으로, 다시 QA 기준으로 변환되며 의미가 조금씩 달라집니다.</p>
-            </article>
-            <article class="problem-card">
-              <h3>QA와 리뷰가 뒤늦게 붙음</h3>
-              <p>개발이 끝난 뒤 테스트 범위, 중간 리뷰, 회귀 확인이 순차적으로 시작되면 제품 변화 사이클이 길어집니다.</p>
-            </article>
-            <article class="problem-card">
-              <h3>실험 시안이 늦게 보임</h3>
-              <p>fixture 기반 시안이 늦으면 조직 간 의견 차이와 누락 기능이 구현 후반에 발견됩니다.</p>
-            </article>
-            <article class="problem-card">
-              <h3>자동화가 출시 전략과 분리됨</h3>
-              <p>회귀 테스트와 신규 기능 테스트가 제품 가설과 연결되지 않으면 자동화는 속도보다 유지보수 비용이 됩니다.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="portfolio" class="section wrap">
-        <div class="section-panel">
-          <p class="eyebrow">Detailed Portfolio</p>
-          <h2>상세 포트폴리오</h2>
-          <div class="portfolio-grid">
-            <article class="portfolio-card">
-              <p class="eyebrow">Case 01</p>
-              <h3>AI-assisted Release QA</h3>
-              <p>
-                모호한 릴리즈 설명을 구조화된 AI 입력, 검토 가능한 QA 산출물, 회귀 테스트 후보,
-                고객용/내부용 문서로 분리한 사례입니다. 기존 A4 evidence-pack 디자인 톤을 유지한
-                상세 포트폴리오 페이지입니다.
-              </p>
-              <a class="button primary" href="portfolio/release-qa.html">상세 페이지 열기</a>
-            </article>
-            <article class="portfolio-card">
-              <p class="eyebrow">Case 02</p>
-              <h3>Documentation Operating System</h3>
-              <p>
-                AI 에이전트와 사람이 같은 문서 기준, 세션 로그, phase 완료 조건을 읽고 작업 맥락을 복원하도록 설계한 문서 운영 구조입니다.
-                ActiveDocs, 문서 권한 계층, 업데이트 라우팅, 에이전트 handoff, QA 후 Wiki 자산화를 포트폴리오 관점으로 정리했습니다.
-              </p>
-              <a class="button primary" href="portfolio/documentation-os.html">상세 페이지 열기</a>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="model" class="section wrap">
-        <div class="section-panel">
-          <p class="eyebrow">Operating Model</p>
-          <h2>빠른 실험 조직으로 바꾸는 작업 방식</h2>
-          <div class="operating-model">
-            <article class="step-card">
-              <b>1</b>
-              <h3>PMF 가설 정렬</h3>
-              <p>고객 니즈를 바로 기능 목록으로 번역하지 않고, 검증할 시장 가설과 실패 조건으로 정리합니다.</p>
-            </article>
-            <article class="step-card">
-              <b>2</b>
-              <h3>기존 기능 잠금</h3>
-              <p>기존 동작은 TDD와 회귀 기준으로 보호해 실험이 제품 신뢰도를 깨지 않게 합니다.</p>
-            </article>
-            <article class="step-card">
-              <b>3</b>
-              <h3>시안과 테스트 병렬화</h3>
-              <p>fixture 기반 시안, 개발 계획, 테스트 계획을 같은 맥락에서 동시에 만듭니다.</p>
-            </article>
-            <article class="step-card">
-              <b>4</b>
-              <h3>릴리즈 검증 자동 초안</h3>
-              <p>신규 기능 테스트와 리그레션 초안을 AI로 만들고 사람 리뷰와 실행 게이트로 통제합니다.</p>
-            </article>
-          </div>
-          <div class="resume-line">
-            <div><strong>Positioning</strong><span>AI-native QA / Release Acceleration / Agentic Workflow</span></div>
-            <div><strong>Strength</strong><span>기획, 개발, QA 문맥을 하나의 출시 루프로 연결</span></div>
-            <div><strong>Portfolio Focus</strong><span>빠른 실험, 검증 자동화, 문서 기반 handoff</span></div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer wrap">
-      <p>GitHub: <a href="https://github.com/prefix9671">prefix9671</a> · Portfolio source policy: <a href="CENTRAL_DOCUMENT_POLICY.md">CENTRAL_DOCUMENT_POLICY.md</a></p>
-    </footer>
-  </body>
-</html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI-native QA / Release Engineer 포트폴리오">
+  <meta name="author" content="시우 조">
+  <meta property="og:title" content="AI-native QA / Release Engineer">
+  <meta property="og:description" content="릴리즈 병목을 코드·테스트·문서·회귀 자동화로 줄이는 포트폴리오입니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://prefix9671.github.io/">
+  <title>AI-native QA / Release Engineer</title>
+  <style>
+    :root { color-scheme: light; --paper:#f4f1e8; --sheet:#fff; --ink:#141820; --muted:#626a76; --line:#d8d2c2; --navy:#1f2d3d; --green:#2f7d66; --red:#b5533f; --gold:#d9a441; --blue:#496b9d; --purple:#6f5a8f; --shadow:0 18px 40px rgba(20,24,32,.09); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:"Pretendard","Noto Sans KR","Segoe UI",Arial,sans-serif; line-height:1.58; }
+    a { color:inherit; }
+    .site-header { position:sticky; top:0; z-index:20; border-bottom:1px solid rgba(20,24,32,.12); background:rgba(244,241,232,.92); backdrop-filter:blur(14px); }
+    .nav,.wrap { width:min(1120px,calc(100% - 36px)); margin:0 auto; }
+    .nav { display:flex; align-items:center; justify-content:space-between; min-height:66px; gap:20px; }
+    .brand { font-size:.96rem; font-weight:900; text-decoration:none; }
+    .nav-links { display:flex; flex-wrap:wrap; align-items:center; gap:16px; color:var(--muted); font-size:.92rem; }
+    .nav-links a { text-decoration:none; }
+    .nav-links a:hover,.brand:hover { color:var(--green); }
+    .hero { padding:56px 0 24px; }
+    .hero-sheet { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(280px,.72fr); gap:34px; align-items:stretch; min-height:470px; border:1px solid var(--line); border-top:8px solid var(--navy); background:var(--sheet); box-shadow:var(--shadow); }
+    .hero-copy { padding:38px; }
+    .eyebrow { margin:0 0 12px; color:var(--red); font-size:.78rem; font-weight:900; text-transform:uppercase; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:780px; margin-bottom:12px; font-size:2.08rem; line-height:1.12; }
+    h2 { margin-bottom:14px; font-size:2rem; line-height:1.22; }
+    h3 { margin-bottom:8px; font-size:1.02rem; line-height:1.35; }
+    .hero-statement { max-width:780px; margin-bottom:18px; color:var(--navy); font-size:1.52rem; font-weight:900; line-height:1.28; }
+    .keep { white-space:nowrap; }
+    .lead { max-width:760px; color:var(--muted); font-size:1rem; line-height:1.7; }
+    .hero-visual { display:flex; flex-direction:column; justify-content:space-between; gap:18px; border-left:1px solid var(--line); background:#f8faf7; padding:26px; }
+    .cycle-map { display:grid; gap:10px; }
+    .cycle-node { border:1px solid rgba(20,24,32,.16); background:#fff; padding:12px; }
+    .cycle-node strong { display:block; margin-bottom:2px; font-size:.92rem; }
+    .cycle-node span { color:var(--muted); font-size:.84rem; }
+    .metric-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .metric { border:1px solid var(--line); background:#fff; padding:12px; }
+    .metric b { display:block; color:var(--green); font-size:1.35rem; line-height:1; }
+    .metric span { color:var(--muted); font-size:.78rem; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; min-height:44px; border:1px solid var(--navy); padding:10px 16px; font-weight:800; text-decoration:none; }
+    .button.primary { background:var(--navy); color:#fff; }
+    .button.secondary { background:#fff; }
+    .section { padding:42px 0; }
+    .section-panel { border:1px solid var(--line); background:var(--sheet); padding:30px; }
+    .split { display:grid; grid-template-columns:.88fr 1.12fr; gap:28px; }
+    .problem-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .portfolio-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .problem-card,.portfolio-card,.step-card { border:1px solid var(--line); background:#fff; padding:20px; }
+    .problem-card { border-top:5px solid var(--red); }
+    .portfolio-card { display:flex; min-height:322px; flex-direction:column; border-top:5px solid var(--green); }
+    .portfolio-card:nth-child(2) { border-top-color:var(--blue); }
+    .portfolio-card:nth-child(3) { border-top-color:var(--purple); }
+    .portfolio-card p,.problem-card p,.step-card p,.section-panel p { color:var(--muted); }
+    .portfolio-card .button { margin-top:auto; width:fit-content; }
+    .tag-row { display:flex; flex-wrap:wrap; gap:7px; margin:16px 0 20px; }
+    .tag { border:1px solid rgba(47,125,102,.28); background:rgba(47,125,102,.08); color:#245f4e; padding:5px 8px; font-size:.78rem; font-weight:800; }
+    .operating-model { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:20px; }
+    .step-card { min-height:154px; }
+    .step-card b { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; margin-bottom:14px; background:var(--gold); color:#1b1d22; }
+    .resume-line { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:22px; }
+    .resume-line div { border-left:4px solid var(--navy); background:#f9f8f2; padding:14px; }
+    .resume-line strong { display:block; margin-bottom:4px; }
+    .resume-line span { color:var(--muted); font-size:.9rem; }
+    .footer { padding:34px 0 46px; color:var(--muted); font-size:.9rem; }
+    @media (max-width:980px) { .portfolio-grid { grid-template-columns:1fr; } }
+    @media (max-width:920px) { .hero-sheet,.split,.problem-grid,.operating-model,.resume-line { grid-template-columns:1fr; } .hero-visual { border-left:0; border-top:1px solid var(--line); } h1{font-size:1.82rem;} .hero-statement{font-size:1.32rem;} }
+    @media (max-width:620px) { .nav{align-items:flex-start;flex-direction:column;padding:14px 0;} .nav-links{width:100%;justify-content:space-between;gap:8px;} .hero{padding-top:24px;} .hero-copy,.hero-visual,.section-panel{padding:22px;} h1{font-size:1.55rem;} .hero-statement{font-size:1.16rem;} h2{font-size:1.5rem;} }
+  </style>
+</head>
+<body>
+<header class="site-header"><nav class="nav" aria-label="주요 메뉴"><a class="brand" href="#top">AI-native QA / Release Engineer</a><div class="nav-links"><a href="#thesis">Thesis</a><a href="#portfolio">Portfolio</a><a href="#model">Operating Model</a></div></nav></header>
+<main id="top">
+  <section class="hero wrap"><div class="hero-sheet"><div class="hero-copy">
+    <p class="eyebrow">Resume Summary · Portfolio Gateway</p><h1>AI-native QA / Release Engineer</h1>
+    <p class="hero-statement"><span>릴리즈 병목을</span> <span class="keep">코드·테스트·문서·회귀</span> <span class="keep">자동화로 줄이는 사람</span></p>
+    <p class="lead">고객 니즈가 시장에서 확인된 뒤, PMF 가설, 구현, 테스트 계획, 회귀 검증, 리뷰가 직렬로 늘어지는 문제를 AI-native workflow로 병렬화합니다. 목표는 개발만 빠르게 하는 것이 아니라, 제품 변화가 시장에 도달하는 전체 출시 사이클을 줄이는 것입니다.</p>
+    <div class="tag-row"><span class="tag">AI-assisted QA</span><span class="tag">Release Acceleration</span><span class="tag">TDD Guardrail</span><span class="tag">Fixture Prototype</span><span class="tag">Regression Drafting</span><span class="tag">Agent Context Design</span></div>
+    <div class="actions"><a class="button primary" href="portfolio/release-qa.html">Release QA 상세</a><a class="button secondary" href="portfolio/documentation-os.html">문서 운영 상세</a><a class="button secondary" href="portfolio/legacy-ui-regression.html">레거시 UI 회귀 상세</a></div>
+  </div><div class="hero-visual" aria-label="AI-native 출시 루프"><div class="cycle-map">
+    <div class="cycle-node"><strong>Customer Signal</strong><span>고객 니즈와 시장 신호를 PMF 가설로 정리</span></div>
+    <div class="cycle-node"><strong>Plan + Test Together</strong><span>개발 계획과 테스트 계획을 같은 입력에서 병렬 생성</span></div>
+    <div class="cycle-node"><strong>TDD Guardrail</strong><span>기존 기능은 테스트로 잠그고 실험 범위를 명확화</span></div>
+    <div class="cycle-node"><strong>Fixture Prototype</strong><span>시안과 데이터 fixture로 조직 간 해석 차이를 빠르게 확인</span></div>
+    <div class="cycle-node"><strong>Regression Draft</strong><span>신규 기능과 회귀 테스트 초안을 함께 생성</span></div>
+  </div><div class="metric-strip"><div class="metric"><b>1</b><span>시장 가설</span></div><div class="metric"><b>2</b><span>구현/QA 병렬화</span></div><div class="metric"><b>3</b><span>릴리즈 검증 루프</span></div></div></div></div></section>
+  <section id="thesis" class="section wrap"><div class="section-panel split"><div><p class="eyebrow">Market Problem</p><h2>병목은 개발 속도 하나가 아니라 출시 해석 체계 전체에 있습니다.</h2></div><div class="problem-grid">
+    <article class="problem-card"><h3>고객 니즈가 여러 번 번역됨</h3><p>고객 신호가 기획 문서로, 다시 개발 해석으로, 다시 QA 기준으로 변환되며 의미가 조금씩 달라집니다.</p></article>
+    <article class="problem-card"><h3>QA와 리뷰가 뒤늦게 붙음</h3><p>개발이 끝난 뒤 테스트 범위, 중간 리뷰, 회귀 확인이 순차적으로 시작되면 제품 변화 사이클이 길어집니다.</p></article>
+    <article class="problem-card"><h3>실험 시안이 늦게 보임</h3><p>fixture 기반 시안이 늦으면 조직 간 의견 차이와 누락 기능이 구현 후반에 발견됩니다.</p></article>
+    <article class="problem-card"><h3>자동화가 출시 전략과 분리됨</h3><p>회귀 테스트와 신규 기능 테스트가 제품 가설과 연결되지 않으면 자동화는 속도보다 유지보수 비용이 됩니다.</p></article>
+  </div></div></section>
+  <section id="portfolio" class="section wrap"><div class="section-panel"><p class="eyebrow">Detailed Portfolio</p><h2>상세 포트폴리오</h2><div class="portfolio-grid">
+    <article class="portfolio-card"><p class="eyebrow">Case 01</p><h3>AI-assisted Release QA</h3><p>모호한 릴리즈 설명을 구조화된 AI 입력, 검토 가능한 QA 산출물, 회귀 테스트 후보, 고객용/내부용 문서로 분리한 사례입니다.</p><a class="button primary" href="portfolio/release-qa.html">상세 페이지 열기</a></article>
+    <article class="portfolio-card"><p class="eyebrow">Case 02</p><h3>Documentation Operating System</h3><p>AI 에이전트와 사람이 같은 문서 기준, 세션 로그, phase 완료 조건을 읽고 작업 맥락을 복원하도록 설계한 문서 운영 구조입니다.</p><a class="button primary" href="portfolio/documentation-os.html">상세 페이지 열기</a></article>
+    <article class="portfolio-card"><p class="eyebrow">Case 03</p><h3>Legacy UI Regression Automation</h3><p>문서·보안 제약으로 AI 문맥 연결이 제한된 환경에서, SVN 변경 의도와 코드 리뷰를 지식화하고 WPF·DevExpress 커스텀 UI를 관측 가능한 회귀 테스트 구조로 전환한 사례입니다.</p><a class="button primary" href="portfolio/legacy-ui-regression.html">상세 페이지 열기</a></article>
+  </div></div></section>
+  <section id="model" class="section wrap"><div class="section-panel"><p class="eyebrow">Operating Model</p><h2>빠른 실험 조직으로 바꾸는 작업 방식</h2><div class="operating-model">
+    <article class="step-card"><b>1</b><h3>PMF 가설 정렬</h3><p>고객 니즈를 바로 기능 목록으로 번역하지 않고, 검증할 시장 가설과 실패 조건으로 정리합니다.</p></article>
+    <article class="step-card"><b>2</b><h3>기존 기능 잠금</h3><p>기존 동작은 TDD와 회귀 기준으로 보호해 실험이 제품 신뢰도를 깨지 않게 합니다.</p></article>
+    <article class="step-card"><b>3</b><h3>시안과 테스트 병렬화</h3><p>fixture 기반 시안, 개발 계획, 테스트 계획을 같은 맥락에서 동시에 만듭니다.</p></article>
+    <article class="step-card"><b>4</b><h3>릴리즈 검증 자동 초안</h3><p>신규 기능 테스트와 리그레션 초안을 AI로 만들고 사람 리뷰와 실행 게이트로 통제합니다.</p></article>
+  </div><div class="resume-line"><div><strong>Positioning</strong><span>AI-native QA / Release Acceleration / Agentic Workflow</span></div><div><strong>Strength</strong><span>기획, 개발, QA 문맥을 하나의 출시 루프로 연결</span></div><div><strong>Portfolio Focus</strong><span>빠른 실험, 검증 자동화, 문서 기반 handoff</span></div></div></div></section>
+</main>
+<footer class="footer wrap"><p>GitHub: <a href="https://github.com/prefix9671">prefix9671</a> · Portfolio source policy: <a href="CENTRAL_DOCUMENT_POLICY.md">CENTRAL_DOCUMENT_POLICY.md</a></p></footer>
+</body></html>
