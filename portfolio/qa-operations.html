@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="사람의 품질판단, AI 기반 Jira 행정, 시각 검증, Validator와 GitLab Gate를 결합한 QA Operations 상세 포트폴리오">
+  <meta name="author" content="시우 조">
+  <title>QA Operations Automation · 시우 조</title>
+  <style>
+    :root{--paper:#f4f1e8;--sheet:#fff;--ink:#141820;--muted:#626a76;--line:#d8d2c2;--navy:#1f2d3d;--green:#2f7d66;--red:#b5533f;--gold:#d9a441;--blue:#496b9d;--purple:#6f5a8f;--shadow:0 18px 40px rgba(20,24,32,.09)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Pretendard","Noto Sans KR","Segoe UI",Arial,sans-serif;line-height:1.7}a{color:inherit}.wrap{width:min(1100px,calc(100% - 36px));margin:0 auto}.header{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(20,24,32,.12);background:rgba(244,241,232,.94);backdrop-filter:blur(12px)}.nav{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:18px}.nav a{text-decoration:none;font-weight:900}.nav-links{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.88rem}.hero{padding:52px 0 26px}.sheet{border:1px solid var(--line);background:var(--sheet);box-shadow:var(--shadow);padding:38px}.eyebrow{margin:0 0 10px;color:var(--red);font-size:.78rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase}h1,h2,h3,h4,p{margin-top:0}h1{font-size:2.2rem;line-height:1.12}h2{font-size:1.7rem;line-height:1.25}h3{font-size:1.12rem;line-height:1.35}.lead{max-width:900px;color:var(--muted);font-size:1.04rem}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}.stat{border:1px solid var(--line);background:#fff;padding:14px}.stat b{display:block;color:var(--green);font-size:1.4rem}.stat span{color:var(--muted);font-size:.82rem}.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.toc a{border:1px solid var(--navy);background:#fff;padding:8px 11px;text-decoration:none;font-weight:800}.section{padding:22px 0}.grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:28px}.meta{position:sticky;top:88px;border-left:5px solid var(--green);background:#f8faf7;padding:18px}.meta strong{display:block;margin-top:12px}.meta strong:first-child{margin-top:0}.meta span{display:block;color:var(--muted);font-size:.9rem}.story{display:grid;gap:12px}.story section{border:1px solid var(--line);background:#fff;padding:16px}.story ul{margin:7px 0 0;padding-left:20px;color:var(--muted)}.story li{margin:5px 0}.result{border-left:5px solid var(--gold);background:#fff9e9;padding:16px;margin-top:16px;font-weight:900}.warning{border-left:5px solid var(--red);background:#fff5f2;padding:16px;margin-top:16px}.info{border-left:5px solid var(--blue);background:#f3f7fb;padding:16px;margin-top:16px}.guardrail{border:1px solid var(--line);background:#f8f7f2;padding:16px;margin-top:16px}.guardrail h3{font-size:1rem}.matrix{width:100%;border-collapse:collapse;margin:14px 0}.matrix th,.matrix td{border:1px solid var(--line);padding:9px;vertical-align:top;font-size:.92rem}.matrix th{background:#f3f4f6;text-align:left}.code{background:#111827;color:#f9fafb;padding:14px;border-radius:8px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem}.quote{border-left:4px solid var(--red);background:#fff;padding:14px 16px;margin:12px 0;color:var(--muted)}.loop{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}.loop div{border:1px solid var(--line);background:#fff;padding:12px;text-align:center;font-weight:800;font-size:.9rem}.footer{padding:34px 0 48px;color:var(--muted);font-size:.9rem}@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.loop{grid-template-columns:1fr}}@media(max-width:800px){.grid{grid-template-columns:1fr}.meta{position:static}.sheet{padding:24px}h1{font-size:1.68rem}.nav{align-items:flex-start;flex-direction:column;padding:13px 0}}@media(max-width:520px){.stats{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header class="header"><nav class="nav wrap"><a href="../resume/qa-automation.html">← QA Automation / Release Engineer</a><div class="nav-links"><a href="#regression">Regression</a><a href="#feedback">Feedback Loop</a><a href="#visual">Visual</a><a href="#governance">Governance</a><a href="#field">Field QA</a></div></nav></header>
+<main>
+  <section class="hero wrap"><div class="sheet"><p class="eyebrow">Detailed Portfolio · QA Operations</p><h1>자동화율보다, 사람이 더 많은 품질판단을 할 수 있는 구조를 만듭니다.</h1><p class="lead">기능 실행을 모두 스크립트로 바꾸는 것이 항상 빠르지는 않습니다. 변화가 잦은 SI·레거시·실장비 환경에서는 사람이 실제 사용자처럼 판단하고, 시스템이 반복 실행·데이터 비교·스크린샷·Jira·CI Gate를 맡는 편이 전체 피드백 루프를 더 빠르게 만듭니다. 이 페이지는 그 경계를 어떻게 정하고, Agent가 편한 길로 도망가지 못하게 어떻게 완료조건을 설계했는지를 설명합니다.</p><div class="stats"><div class="stat"><b>2,641</b><span>자동화된 TC</span></div><div class="stat"><b>30d → 21d</b><span>월간 테스트기간</span></div><div class="stat"><b>20m → 3m</b><span>이슈 처리시간</span></div><div class="stat"><b>300+</b><span>사전 차단 데이터 이슈</span></div></div><div class="toc"><a href="#regression">01 보고서 회귀</a><a href="#feedback">02 QA 피드백 루프</a><a href="#visual">03 시각 검증</a><a href="#governance">04 Agent·Validator·CI</a><a href="#field">05 현장·실장비 QA</a></div></div></section>
+
+  <section id="regression" class="section wrap"><div class="sheet grid"><aside><p class="eyebrow">Case 01 · Regression</p><h2>보고서 37종·출력조합 1,382종 자동 검증</h2><div class="meta"><strong>기존 방식</strong><span>담당자 1명이 화면을 조작하고 출력 보고서를 눈으로 비교</span><strong>전체 TC</strong><span>5,372건</span><strong>자동화 범위</strong><span>2,641건, 약 46%</span><strong>남긴 수동 범위</strong><span>GPU·광학·실장비와 해석이 필요한 결과</span></div></aside><article>
+    <p>SPC 환경은 보고서 종류만 37개였고 옵션·언어·컬럼·데이터 조건을 조합하면 출력 경우의 수가 1,382종에 달했습니다. 전면 UI 자동화만 하면 화면은 열리지만 보고서 안의 값이 DB 원본과 같은지 확인할 수 없고, 반대로 DB만 비교하면 레이아웃·언어팩·컬럼 위치 오류를 놓쳤습니다.</p>
+    <div class="story">
+      <section><h3>1. 테스트 단위를 “클릭”이 아니라 “출력 결과”로 정의</h3><p>UI 자동화는 보고서 조건을 만들고 출력하는 손발로 사용했습니다. 검증 기준은 HTML 보고서를 파싱한 결과와 DB 원본의 값·컬럼·정렬·언어를 비교하는 것이었습니다.</p></section>
+      <section><h3>2. 자동화 가능한 46%를 먼저 잠금</h3><p>모든 TC를 자동화하지 않았습니다. 데이터가 결정적으로 비교되고 화면 조작이 안정적인 경로 2,641건을 반복 회귀로 전환했습니다. 광학결과의 의미판단, 장비상태, GPU 렌더링처럼 신뢰할 수 없는 범위는 수동 QA로 남겼습니다.</p></section>
+      <section><h3>3. 데이터 정합성 이슈를 구조적으로 차단</h3><p>HTML과 DB를 직접 비교하면서 X/Y 컬럼 오출력, 언어팩 미적용, 조건별 컬럼 누락 등 300건 이상의 문제를 릴리즈 전에 발견했습니다. 화면상 “보고서가 열렸다”는 성공과 데이터가 맞다는 성공을 분리했습니다.</p></section>
+      <section><h3>4. 사람이 보는 범위를 위험 기반으로 재배치</h3><p>정상 반복은 자동화가 처리하고, 사람이 봐야 하는 신규 옵션·광학결과·애매한 차이만 예외 목록으로 올렸습니다. 자동화가 사람을 대체한 것이 아니라 사람의 검토 우선순위를 바꾼 것입니다.</p></section>
+    </div>
+    <div class="result">결과: 월간 릴리즈 평균 테스트기간을 30일에서 21일로 줄이고, 반복 회귀를 2영업일에서 0.5일로 단축했습니다. 데이터 관련 VOC는 월 7건에서 1건으로 감소했습니다.</div>
+  </article></div></section>
+
+  <section id="feedback" class="section wrap"><div class="sheet grid"><aside><p class="eyebrow">Case 02 · Feedback Loop</p><h2>사람의 판단과 AI Jira 행정 분리</h2><div class="meta"><strong>인간 입력</strong><span>스크린샷, TC, 짧은 제목, 고객영향 분류</span><strong>Agent 출력</strong><span>회사 표준 제목·재현절차·Severity·증적·Jira 필드</span><strong>적용 임계치</strong><span>소량은 수기, 하루 30건 이상 대량 구간 자동화</span><strong>성과</strong><span>20분 → 3분, 2일 231건</span></div></aside><article>
+    <p>테스트 자동화를 논의할 때 가장 먼저 버튼 클릭을 자동화하려는 경우가 많습니다. 그러나 변화가 잦은 환경에서는 사람이 클릭하는 30초보다 이후 스크린샷 정리, 파일명, TC 연결, 제목·본문, Severity, Jira 첨부에 10~20분이 더 들었습니다.</p>
+    <div class="story">
+      <section><h3>1. QA가 빠르게 판단할 여섯 가지</h3><table class="matrix"><thead><tr><th>분류</th><th>QA가 판단하는 질문</th><th>시스템이 후속으로 하는 일</th></tr></thead><tbody><tr><td>실행불가</td><td>프로그램·기능이 켜지지 않는가</td><td>핵심흐름 차단으로 즉시 발사</td></tr><tr><td>데이터</td><td>원본과 화면·보고서 값이 다른가</td><td>DB 근거·영향범위 연결</td></tr><tr><td>업무단계</td><td>다음 단계로 진행할 수 없는가</td><td>사용자 여정 위치와 우회 가능성 반영</td></tr><tr><td>금전</td><td>금액·수량·정산에 영향이 있는가</td><td>최상위 우선순위 후보로 분류</td></tr><tr><td>시각</td><td>기능은 되지만 잘림·가림·대비 문제가 있는가</td><td>Screenshot과 viewport를 증적화</td></tr><tr><td>이탈</td><td>핵심 CTA를 찾지 못해 사용자가 포기할 수 있는가</td><td>단순 UI가 아닌 고객여정 결함으로 승격</td></tr></tbody></table></section>
+      <section><h3>2. Agent가 회사 규격으로 변환</h3><p>QA가 남긴 압축된 판단을 제품·버전·컴포넌트·기존 TC·유사 Jira와 결합해 사전조건, 재현절차, Actual, Expected, 발생빈도, 우선순위 근거와 증적을 구성했습니다. 최종 QA 승인 전에는 Jira에 쓰지 않았습니다.</p></section>
+      <section><h3>3. 자동화의 손익분기점</h3><p>이슈가 1~3건이면 사람이 직접 쓰는 편이 더 빠릅니다. 하루 30건 이상 발견되는 기간에는 문서 작성으로 약 3시간이 사라졌고, 그 시간을 추가 10개 이슈 탐색이나 패치 재검증에 쓸 수 있었습니다. 따라서 자동화를 상시 강제하지 않고 업무량에 따라 사용했습니다.</p></section>
+      <section><h3>4. MRLS 문제와 사격통제</h3><p>행정 병목이 사라지자 개발팀에 실제 이슈가 한꺼번에 보였습니다. 모든 결함을 동일한 속도로 발사하면 중요한 이슈가 묻혔기 때문에 아래 정책을 추가했습니다.</p><ul><li>Critical·보안·데이터손상·금전·핵심여정 차단: 즉시 개별 발사</li><li>우회 가능한 기능·성능·조건부 결함: 정기 배치</li><li>공통 UI·문구·레이아웃: 원인 또는 화면 단위 묶음</li><li>개인 취향 가능성·의도 불명확: 개선 제안으로 보류</li></ul></section>
+      <section><h3>5. 최종 KPI는 문서시간이 아니라 피드백 루프</h3><div class="loop"><div>이슈 발견</div><div>즉시 구조화</div><div>개발 패치</div><div>재설치·재검증</div><div>Pass / 재오픈</div></div><p>AI가 보고서를 쓴 덕분에 사람은 패치를 한 번 더 설치하고 검증할 수 있었습니다. 릴리즈에 필요한 것은 티켓 수가 아니라 하루에 몇 번 수정–검증 루프를 닫을 수 있는지였습니다.</p></section>
+    </div>
+    <div class="result">결과: Jira 이슈 처리시간을 약 20분에서 3분으로 줄였고, 하루 최대 139건·2일 231건을 동일 형식으로 구조화했습니다. 특정 대량 배치의 최대 처리량은 51건/h였으며 평균 성능으로 과장하지 않고 배치 최대치로 관리했습니다.</div>
+  </article></div></section>
+
+  <section id="visual" class="section wrap"><div class="sheet grid"><aside><p class="eyebrow">Case 03 · Visual Validation</p><h2>DOM 정상 False Pass를 막는 Screenshot Gate</h2><div class="meta"><strong>반복 실패</strong><span>Headless에서 DOM·API만 보고 “잘 된다”고 완료</span><strong>대표 문제</strong><span>CTA 버튼이 존재하고 클릭되지만 색상 상속으로 배경과 동일</span><strong>강제 계층</strong><span>Skill → Agent Procedure → Validator</span><strong>판정</strong><span>Functional / Visual / Customer Journey / Overall</span></div></aside><article>
+    <p>DOM에는 버튼이 있고 클릭 이벤트와 API도 정상인데, CTA 배경과 텍스트가 주변 배경과 같은 색이라 사용자가 버튼을 발견할 수 없는 사례가 있었습니다. 기능 테스트만 보면 Pass지만 고객에게는 버튼이 없는 것과 같았습니다.</p>
+    <div class="warning"><strong>False Pass 예시</strong><p>Functional Result: Pass · API 200 · 다음 상태 생성<br>Visual Result: Fail · CTA 식별 불가<br>Customer Journey Result: Fail · 가입/결제 다음 단계 이탈 가능<br>Overall Result: Fail</p></div>
+    <div class="story">
+      <section><h3>1. 왜 프롬프트 한 줄로 해결되지 않았나</h3><p>“스크린샷을 보라”고 한 번 지시해도 세션이 길어지면 Agent가 효율을 이유로 DOM 검사만 남기고 시각 검증을 생략했습니다. 권고가 아니라 완료조건에 넣어야 했습니다.</p></section>
+      <section><h3>2. Skill 계층</h3><p>UI 검증은 DOM·접근성 트리·네트워크만으로 완료할 수 없으며 주요 상태 전환과 최종 화면의 Screenshot을 수집하고 실제 렌더링을 확인해야 한다고 정의했습니다.</p></section>
+      <section><h3>3. Agent 실행 절차</h3><div class="code">1. 페이지 진입
+2. DOM·접근성·네트워크 확인
+3. 사용자 행동 수행
+4. 상태 변화 확인
+5. 렌더 안정화 대기
+6. Screenshot 촬영
+7. 식별성·겹침·잘림·대비·반응형 검증
+8. 기능·시각·고객여정을 함께 판정</div></section>
+      <section><h3>4. Validator 계층</h3><p>스크린샷 파일, viewport, 시각 판정, 핵심 CTA 식별성, 실제 이미지 존재를 검사했습니다. Pass인데 Visual Result가 없거나 파일 경로만 있고 이미지가 없으면 완료를 거부했습니다.</p></section>
+      <section><h3>5. 왜 화면과 DOM을 모두 봐야 하나</h3><ul><li>투명 Overlay가 버튼을 덮지만 DOM bounding box는 정상일 수 있습니다.</li><li>모바일에서 고정 Footer가 CTA를 가릴 수 있습니다.</li><li>다크모드에서 색상 상속이 반대로 적용될 수 있습니다.</li><li>텍스트는 DOM에 있지만 말줄임으로 행동 의미가 사라질 수 있습니다.</li><li>Skeleton이 남아 데이터가 렌더됐어도 사용자에게 보이지 않을 수 있습니다.</li></ul></section>
+    </div>
+    <div class="result">결과: “기능적으로 존재하고 클릭된다”를 UI Pass 조건에서 제거하고, 사용자가 실제로 보고 다음 행동을 이해할 수 있는지를 완료조건에 포함했습니다.</div>
+  </article></div></section>
+
+  <section id="governance" class="section wrap"><div class="sheet grid"><aside><p class="eyebrow">Case 04 · Agent Governance</p><h2>세션이 길어져도 편한 길로 도망가지 못하는 완료 체계</h2><div class="meta"><strong>관찰</strong><span>세션 초반에는 규칙 준수, 후반에는 “이번 변경은 단순하다”며 생략</span><strong>대응</strong><span>단계 전환마다 규칙 재검색·Validator 실행</span><strong>최종 Gate</strong><span>Local Validator → Git status → GitLab Clean Runner → Artifact</span><strong>대표 실패</strong><span>로컬 bin 캐시에 있던 DLL을 저장소에 포함하지 않아 CI 실패</span></div></aside><article>
+    <p>Agent가 피곤한 것은 아니지만 긴 세션에서는 최근 작업 맥락이 초반 규칙보다 강해지고, 완료 확률이 높은 최소 행동을 선택하는 경향이 있었습니다. “이번 변경은 단순해서 DOM 확인으로 충분하다” 같은 자체 예외를 허용하지 않도록 워크플로를 설계했습니다.</p>
+    <div class="story">
+      <section><h3>1. 작업 시작 전 저장소의 기억을 검색</h3><p>새 작업에 바로 코드를 쓰지 않고 AGENTS, Skill, Validator, 과거 실패 기록, 통과한 선례를 먼저 검색하게 했습니다.</p><div class="code">rg -n "must|required|validator|screenshot|visual" .
+rg -n "false pass|CTA|headless|dark mode" .
+rg -n "evidence_path|overall_result|missing DLL" .</div><p>중복 규칙은 비효율이 아니라 과거에 서로 다른 계층으로 도망간 이력을 막는 Defense in Depth였습니다.</p></section>
+      <section><h3>2. 단계 전환마다 재동기화</h3><ul><li>구현 시작 전: 관련 Skill·실패사례·완료조건 재확인</li><li>테스트 시작 전: 증적 요구조건과 실행환경 재확인</li><li>완료 선언 전: 실제 파일 존재·Validator·Git 상태 확인</li></ul></section>
+      <section><h3>3. “완료했습니다”의 구조화</h3><p>완료 보고에는 변경 파일, 실행 테스트, 기능 결과, 시각 결과, Screenshot 경로, Validator 결과, 미검증 범위와 남은 리스크가 모두 있어야 했습니다. 하나라도 없으면 완료라는 표현을 허용하지 않았습니다.</p></section>
+      <section><h3>4. GitLab이 잡은 로컬 착시</h3><p>Agent가 로컬에서 빌드와 실행이 된다고 푸시했지만 GitLab Clean Runner에서 DLL 누락으로 실패했습니다. 로컬 bin에 과거 빌드 산출물이 남아 있었고 Git에는 포함되지 않았습니다.</p><div class="quote">교훈: 로컬에서 된다가 아니라, 깨끗한 환경에서 restore·build·test하고 필요한 DLL과 Artifact가 저장소·패키지에 실제 포함됐을 때만 완료입니다.</div></section>
+      <section><h3>5. 방어 계층</h3><table class="matrix"><thead><tr><th>계층</th><th>역할</th><th>막는 도주</th></tr></thead><tbody><tr><td>Skill</td><td>무엇을 반드시 해야 하는지 정의</td><td>규칙 자체를 모르는 문제</td></tr><tr><td>Agent Procedure</td><td>실행 순서와 증적 수집 강제</td><td>중간 절차 생략</td></tr><tr><td>Local Validator</td><td>완료 산출물의 형식과 파일 존재 확인</td><td>말로만 완료</td></tr><tr><td>GitLab Pipeline</td><td>Clean Runner에서 빌드·테스트·Artifact 검증</td><td>캐시·환경·누락 DLL 의존</td></tr><tr><td>Smoke</td><td>실제 배포 후 핵심경로 확인</td><td>빌드 성공과 운영 성공 혼동</td></tr></tbody></table></section>
+    </div>
+    <div class="result">결과: 모델을 신뢰해서 품질을 유지한 것이 아니라, 모델이 기억을 잃거나 편한 경로를 선택해도 완료할 수 없는 시스템을 만들었습니다.</div>
+  </article></div></section>
+
+  <section id="field" class="section wrap"><div class="sheet grid"><aside><p class="eyebrow">Case 05 · Field & Device QA</p><h2>실장비·고객환경을 재현 가능한 검증 입력으로 전환</h2><div class="meta"><strong>하드웨어</strong><span>컨베이어·모터·광학계 교체, 캘리브레이션, 보드 펌웨어, 산업용 PC</span><strong>복원력</strong><span>AOI 랜덤 다운 Wrapper·Watchdog 부분 재시작</span><strong>시뮬레이션</strong><span>네트워크 스토리지 장애 92종, 개선 요청 61종</span><strong>실제 샘플</strong><span>글로벌 고객 승인 PCB 4종 12개로 장시간 검증</span></div></aside><article>
+    <p>현장 장애는 “소프트웨어 버그” 한 종류로 들어오지 않습니다. 네트워크 지연, 컨베이어 조립, 광학 환경, 펌웨어, PC 온도·진동·클럭, 데이터 동시수정이 같은 증상으로 보일 수 있어 HW·SW·네트워크를 빠르게 분리하는 능력이 필요했습니다.</p>
+    <div class="story">
+      <section><h3>1. AOI 레거시 랜덤 다운</h3><p>공유 메모리 기반 프로그램의 랜덤 다운에 대해 전체 장비를 재시작하는 대신 외부 UI Wrapper와 Watchdog으로 실패 프로세스만 부분 재시작하도록 제안·검증했습니다. 고객사 시스템 다운 VOC는 월 3~4건에서 0건으로 감소했고 대형 고객의 쉽백 클레임 취소에 기여했습니다.</p></section>
+      <section><h3>2. 네트워크 스토리지 실패 시뮬레이터</h3><p>고객 환경에서만 발생한다는 이유로 재현을 포기하지 않고 file lock, partial read/write, concurrent modify, freeze 상태를 Python으로 만들었습니다. 총 92종의 장애 케이스를 확보하고 61종에 대해 예외처리 개선을 요청했습니다.</p></section>
+      <section><h3>3. 고객 승인 실제 PCB 기반 검증</h3><p>글로벌 Tier-1 고객 공장장과 보안 책임자의 서면 승인을 받아 민감부품과 좌표정보를 제거한 PCB 4종 12개를 국내에 반출했습니다. 실제 보드로 컨포멀 코팅 알고리즘을 반복 실행하던 중 메모리 누수로 장비가 다운되는 문제를 발견해 고객 시스템 연동 패치에 수정본을 함께 반영했습니다.</p></section>
+      <section><h3>4. 직접 수행한 장비 업무</h3><ul><li>SW 설치와 현장 패치</li><li>컨베이어 벨트·모터·광학계 교체</li><li>광학계 캘리브레이션과 정밀 계측</li><li>보드 펌웨어 업데이트</li><li>산업용 PC 선정과 온도·진동·클럭·동작 검증</li></ul></section>
+    </div>
+    <div class="info"><strong>QA의 역할 정의</strong><p>마지막에 버튼을 누르며 버그를 세는 사람이 아니라, 고객이 기대한 결과가 실제 환경에서 안정적으로 나오지 않을 모든 경로를 찾아 닫는 사람으로 일했습니다.</p></div>
+    <div class="result">결과: 운영환경 재현 불가, 장비 랜덤 다운, 실제 샘플 부족을 테스트 불가 사유로 두지 않고 시뮬레이터·부분복구·정식 샘플 확보로 검증 가능한 입력으로 바꿨습니다.</div>
+  </article></div></section>
+</main>
+<footer class="footer wrap"><p><a href="../resume/qa-automation.html">QA Automation 이력서로 돌아가기</a> · 회사명과 고객사명은 익명화하고 외부 설명 가능한 범위만 공개했습니다.</p></footer>
+</body>
+</html>
