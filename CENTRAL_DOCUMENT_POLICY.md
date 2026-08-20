@@ -1,6 +1,6 @@
 # 중앙 문서 정책: Resume / Portfolio Site
 
-Last updated: 2026-06-21
+Last updated: 2026-08-20
 
 ## 1. 적용 범위
 
@@ -9,6 +9,9 @@ Last updated: 2026-06-21
 - `index.html` (시장 메시지와 이력서 요약, 상세 포트폴리오 진입점)
 - `portfolio/release-qa.html` (원본 A4 evidence-pack 톤을 유지한 Release QA 상세 포트폴리오)
 - `portfolio/documentation-os.html` (문서 운영 체계 상세 포트폴리오)
+- `portfolio/tc-automation-evolution.html` (TC 자동화 발전 기술 회고와 공개 근거 부록)
+- `portfolio/tc-automation-retrospective.md` (TC 자동화 회고 Markdown 권위 원본)
+- `portfolio/claude-tc-automation-runbook.md` (Claude 전용 공개 실행 절차)
 - `release_qa_detail.md`
 - `CENTRAL_DOCUMENT_POLICY.md`
 - `portfolio/` 아래의 공개용 포트폴리오 초안 문서
@@ -24,6 +27,7 @@ GitHub Pages의 대표 문서는 `index.html`이며, 상세 근거는 `portfolio
 | `index.html` | 시장 메시지 + 이력서 요약 + 상세 포트폴리오 게이트웨이 | 채용 담당자 또는 빠른 검토자가 전체 포지셔닝을 즉시 이해 |
 | `portfolio/release-qa.html` | Release QA 상세 evidence pack | AI-assisted QA와 릴리즈 검증 가속 경험 제시 |
 | `portfolio/documentation-os.html` | 문서 운영 체계 상세 evidence pack | AI 에이전트와 사람이 같은 맥락을 공유하는 문서 구조 제시 |
+| `portfolio/tc-automation-evolution.html` | TC 자동화 발전 회고 | 제로베이스에서 evidence, YAML, run/Jira, 웹, Excel Gate로 발전한 과정과 실패 대응 제시 |
 | 상세보기 | 접힌 상세 근거 | 사용자 또는 필요한 검토자만 펼쳐보는 원문형 상세 설명 |
 
 메인 페이지에는 핵심 시장 문제, 포지셔닝, 대표 상세 포트폴리오 링크만 둔다.
@@ -41,24 +45,28 @@ GitHub Pages의 대표 문서는 `index.html`이며, 상세 근거는 `portfolio
 
 ## 4. Markdown 동기화 정책
 
-`release_qa_detail.md`는 Release QA 상세 근거의 Markdown 원본이다.
+`release_qa_detail.md`는 Release QA 상세 근거의 Markdown 원본이고, `portfolio/tc-automation-retrospective.md`는 TC 자동화 발전 회고의 Markdown 권위 원본이다.
 
 - 상세 근거를 수정할 때는 먼저 `release_qa_detail.md`를 수정한다.
 - `portfolio/release-qa.html`의 `#detail` 영역은 `release_qa_detail.md`를 렌더링한 결과와 의미적으로 동일해야 한다.
 - Markdown과 HTML 상세 영역이 충돌하면 상세 근거는 Markdown을 기준으로 정정한다.
 - Release QA 상세 페이지의 요약/포트폴리오 페이지는 요약본이므로 Markdown 원문과 문장이 완전히 같을 필요는 없지만, 사실관계와 용어는 일치해야 한다.
+- TC 자동화 회고를 수정할 때는 `portfolio/tc-automation-retrospective.md`를 먼저 수정하고 `portfolio/tc-automation-evolution.html`의 요약, 연표, 실패 대응표와 근거 부록을 의미적으로 동기화한다.
+- Claude 실행 절차가 변경되면 `portfolio/claude-tc-automation-runbook.md`와 HTML 마지막 런북 안내의 범위, stop condition과 완료 Gate가 충돌하지 않는지 확인한다.
 
 ## 5. 게시 전 검수 체크리스트
 
 게시 전 다음 항목을 확인한다.
 
-- `index.html`이 상세 포트폴리오 두 페이지로 연결되는가.
+- `index.html`과 QA Automation 이력서가 주요 상세 포트폴리오로 연결되는가.
 - `portfolio/release-qa.html`의 title이 원본 톤인 `AI-native Resume Evidence Pack - Release QA`를 유지하는가.
 - Release QA 상세 페이지에서 Page 1은 Resume, Page 2 이후는 Portfolio로 표시되는가.
 - `portfolio/documentation-os.html`이 문서 구조와 에이전트 맥락 공유 의도를 상세 포트폴리오로 설명하는가.
+- `portfolio/tc-automation-evolution.html` 상단에 1-page summary와 현재 아키텍처가 있고 하단에 연표, 실패 대응표, 접힌 근거 부록과 Claude 런북 링크가 있는가.
 - 상세보기 `<details>`가 기본으로 접혀 있는가.
 - 상세보기에서 `release_qa_detail.md`와 `CENTRAL_DOCUMENT_POLICY.md` 링크가 보이는가.
 - Markdown 상단에 중앙 문서 정책과 HTML 동기화 대상이 명시되어 있는가.
+- Mermaid diagram이 렌더링되고 텍스트 fallback과 Claude 런북 링크가 동작하는가.
 - 고객명, 내부 URL, 비공개 티켓, 실제 장비 식별자 같은 민감 정보가 없는가.
 
 ## 6. 변경 절차
@@ -69,6 +77,7 @@ GitHub Pages의 대표 문서는 `index.html`이며, 상세 근거는 `portfolio
 4. 상세 페이지는 근거 중심 포트폴리오 페이지로 유지한다.
 5. 브라우저 또는 정적 검증으로 `<details>` 기본 접힘 상태와 주요 링크를 확인한다.
 6. GitHub Pages 게시 전 최종 HTML과 Markdown을 함께 커밋한다.
+7. TC 자동화 회고 변경은 Markdown 원본, HTML, QA 이력서 진입점과 Claude 런북의 링크 무결성을 함께 검증한다.
 
 ## 7. 비공개 출처 기반 포트폴리오 초안 정책
 

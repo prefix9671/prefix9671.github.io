@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Claude Code와 Excel만 있던 제로베이스에서 문서 근거, YAML TC, run/Jira, 웹 편집, cache invalidation과 Excel 2013 Gate까지 발전시킨 TC 자동화 기술 회고">
+  <meta name="author" content="시우 조">
+  <meta property="og:title" content="TC 자동화 발전 기술 회고 · 시우 조">
+  <meta property="og:description" content="LLM이 틀려도 제품 범위, 실행 차수, 검증 결과와 산출물이 망가지지 않도록 만든 통제 구조의 발전 과정">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://prefix9671.github.io/portfolio/tc-automation-evolution.html">
+  <link rel="icon" href="data:,">
+  <title>TC 자동화 발전 기술 회고 · 시우 조</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #eef1f3;
+      --sheet: #ffffff;
+      --ink: #131820;
+      --muted: #5d6772;
+      --line: #ccd3d9;
+      --navy: #1e2f40;
+      --green: #24715b;
+      --blue: #3e6792;
+      --red: #aa4939;
+      --gold: #b6811e;
+      --soft-green: #edf7f3;
+      --soft-blue: #eef4fa;
+      --soft-red: #fbf1ee;
+      --soft-gold: #faf5e8;
+      --shadow: 0 16px 40px rgba(19, 24, 32, .09);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Pretendard", "Noto Sans KR", "Segoe UI", Arial, sans-serif;
+      line-height: 1.68;
+    }
+    a { color: inherit; }
+    code, pre { font-family: "Cascadia Code", Consolas, monospace; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(19, 24, 32, .15);
+      background: rgba(238, 241, 243, .95);
+      backdrop-filter: blur(12px);
+    }
+    .nav {
+      display: flex;
+      min-height: 66px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { font-weight: 900; text-decoration: none; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 16px; font-size: .88rem; color: var(--muted); }
+    .nav-links a { text-decoration: none; }
+    .hero { padding: 54px 0 34px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, .55fr);
+      gap: 0;
+      border: 1px solid var(--line);
+      border-top: 8px solid var(--navy);
+      background: var(--sheet);
+      box-shadow: var(--shadow);
+    }
+    .hero-copy { padding: 42px; }
+    .hero-proof { border-left: 1px solid var(--line); background: #f7f9fa; padding: 30px; }
+    .eyebrow { margin: 0 0 10px; color: var(--red); font-size: .78rem; font-weight: 900; letter-spacing: 0; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 800px; margin-bottom: 16px; font-size: 2.45rem; line-height: 1.1; }
+    h2 { margin-bottom: 14px; font-size: 1.78rem; line-height: 1.25; }
+    h3 { margin-bottom: 8px; font-size: 1.13rem; line-height: 1.35; }
+    .thesis { margin-bottom: 18px; color: var(--navy); font-size: 1.25rem; font-weight: 900; line-height: 1.42; }
+    .lead { max-width: 830px; margin-bottom: 0; color: var(--muted); }
+    .proof-list { display: grid; gap: 14px; margin: 0; }
+    .proof-list div { border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+    .proof-list div:last-child { border-bottom: 0; padding-bottom: 0; }
+    .proof-list dt { color: var(--green); font-size: 1.35rem; font-weight: 900; }
+    .proof-list dd { margin: 2px 0 0; color: var(--muted); font-size: .86rem; }
+    .disclosure { margin-top: 22px; border-left: 5px solid var(--gold); background: var(--soft-gold); padding: 13px 15px; font-size: .9rem; }
+    .band { padding: 50px 0; border-top: 1px solid var(--line); background: var(--sheet); }
+    .band.alt { background: #f7f9fa; }
+    .section-head { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 28px; margin-bottom: 28px; }
+    .section-index { color: var(--red); font-size: .79rem; font-weight: 900; text-transform: uppercase; }
+    .section-intro { max-width: 820px; color: var(--muted); }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 26px 0; }
+    .summary-item { border-top: 5px solid var(--green); background: var(--soft-green); padding: 18px; }
+    .summary-item:nth-child(2) { border-top-color: var(--blue); background: var(--soft-blue); }
+    .summary-item:nth-child(3) { border-top-color: var(--gold); background: var(--soft-gold); }
+    .summary-item p { margin-bottom: 0; color: var(--muted); }
+    .table-scroll { overflow-x: auto; border: 1px solid var(--line); background: var(--sheet); }
+    table { width: 100%; border-collapse: collapse; min-width: 850px; }
+    th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 13px; text-align: left; vertical-align: top; font-size: .91rem; }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: #fff; font-weight: 800; }
+    tbody tr:nth-child(even) { background: #f7f9fa; }
+    .architecture {
+      border-top: 4px solid var(--blue);
+      background: var(--sheet);
+      padding: 24px;
+      box-shadow: 0 8px 22px rgba(19, 24, 32, .06);
+    }
+    .architecture .mermaid { min-height: 290px; display: flex; align-items: center; justify-content: center; overflow-x: auto; }
+    .responsibility-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin: 28px 0 0; padding: 0; list-style: none; }
+    .responsibility-list li { border-top: 1px solid var(--line); padding: 14px 0; }
+    .responsibility-list strong { color: var(--green); }
+    .timeline { position: relative; margin-left: 12px; padding-left: 30px; }
+    .timeline::before { position: absolute; top: 7px; bottom: 7px; left: 5px; width: 2px; background: var(--line); content: ""; }
+    .timeline-item { position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 22px; padding: 0 0 28px; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before { position: absolute; top: 7px; left: -31px; width: 13px; height: 13px; border: 3px solid var(--sheet); background: var(--green); box-shadow: 0 0 0 1px var(--green); content: ""; }
+    .timeline-date { color: var(--blue); font-weight: 900; }
+    .timeline-copy p { margin-bottom: 7px; color: var(--muted); }
+    .timeline-copy strong { color: var(--ink); }
+    .failure-table td:first-child { width: 21%; font-weight: 800; color: var(--red); }
+    .story { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; border-top: 1px solid var(--line); padding: 28px 0; }
+    .story:first-of-type { border-top: 0; padding-top: 0; }
+    .story-number { color: var(--gold); font-size: 2rem; font-weight: 900; line-height: 1; }
+    .story-label { display: block; margin-top: 7px; color: var(--muted); font-size: .85rem; }
+    .story-copy p { color: var(--muted); }
+    .story-copy ul { margin-bottom: 0; padding-left: 20px; color: var(--muted); }
+    .state-flow { margin: 18px 0; border-left: 5px solid var(--blue); background: var(--soft-blue); padding: 16px; white-space: pre-wrap; font-size: .88rem; }
+    .quote { margin: 22px 0 0; border-left: 5px solid var(--red); background: var(--soft-red); padding: 16px 18px; color: var(--ink); font-weight: 800; }
+    details { border: 1px solid var(--line); background: var(--sheet); }
+    details + details { margin-top: 14px; }
+    summary { cursor: pointer; background: #e9eef2; padding: 16px 18px; color: var(--navy); font-weight: 900; }
+    summary::marker { color: var(--blue); }
+    .detail-body { padding: 22px; }
+    .detail-body h3 { margin-top: 24px; }
+    .detail-body h3:first-child { margin-top: 0; }
+    .detail-body p, .detail-body li { color: var(--muted); }
+    .command { overflow-x: auto; margin: 18px 0; background: #111827; color: #f9fafb; padding: 16px; white-space: pre; font-size: .86rem; }
+    .runbook-banner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px; border-left: 7px solid var(--green); background: var(--soft-green); padding: 24px; }
+    .runbook-banner p { margin-bottom: 0; color: var(--muted); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; border: 1px solid var(--navy); background: var(--navy); color: #fff; padding: 10px 15px; font-weight: 900; text-decoration: none; }
+    .button.secondary { background: #fff; color: var(--navy); }
+    .runbook-checklist { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+    .runbook-checklist section { border-top: 4px solid var(--blue); background: #f7f9fa; padding: 16px; }
+    .runbook-checklist p { margin-bottom: 0; color: var(--muted); font-size: .9rem; }
+    .footer { border-top: 1px solid var(--line); padding: 30px 0 44px; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 900px) {
+      .hero-grid, .section-head, .story { grid-template-columns: 1fr; }
+      .hero-proof { border-top: 1px solid var(--line); border-left: 0; }
+      .summary-grid, .runbook-checklist { grid-template-columns: 1fr; }
+      .responsibility-list { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; gap: 5px; }
+      .runbook-banner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 680px) {
+      .wrap { width: min(100% - 24px, 1120px); }
+      .nav { align-items: flex-start; flex-direction: column; padding: 12px 0; }
+      .hero { padding-top: 24px; }
+      .hero-copy, .hero-proof { padding: 24px; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.45rem; }
+      .thesis { font-size: 1.08rem; }
+      .band { padding: 38px 0; }
+      .architecture { padding: 14px; }
+      .architecture .mermaid { justify-content: flex-start; }
+      .architecture .mermaid svg { min-width: 760px; }
+      .timeline { padding-left: 25px; }
+      .timeline-item::before { left: -26px; }
+    }
+    @media print {
+      .site-header { position: static; }
+      .band, .band.alt { background: #fff; }
+      details { break-inside: avoid; }
+      .button { color: #000; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav wrap">
+      <a class="brand" href="../resume/qa-automation.html">← QA Automation / Release Engineer</a>
+      <div class="nav-links">
+        <a href="#summary">1-page Summary</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#failures">Failures</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#claude-runbook">Claude Runbook</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Case 08 · Technical Retrospective</p>
+          <h1>TC 자동화 발전 기술 회고</h1>
+          <p class="thesis">LLM이 TC를 잘 쓰게 만든 과정이 아니라, LLM이 틀려도 제품 범위·실행 차수·검증 결과·산출물이 망가지지 않도록 통제 구조를 만든 과정입니다.</p>
+          <p class="lead">Claude Code, 사용자 매뉴얼, 릴리즈 노트와 Excel만 있던 제로베이스에서 시작해 문서 evidence, 요구사항 분해, YAML TC, run/Jira, 제품별 웹 인스턴스, cache invalidation과 Excel 2013 최종 검증까지 발전한 과정을 실패 중심으로 정리했습니다.</p>
+          <div class="disclosure">공개 페이지에는 고객사명, 내부 URL, 계정, Jira 키, 실제 장비 식별자와 원문 데이터를 싣지 않았습니다. 내부 commit은 감사 가능한 짧은 식별자와 일반화한 의미만 제공합니다.</div>
+        </div>
+        <aside class="hero-proof" aria-label="주요 검증 지표">
+          <dl class="proof-list">
+            <div><dt>100쪽</dt><dd>이미지 중심 매뉴얼 렌더링 검토</dd></div>
+            <div><dt>203 TC</dt><dd>기능 경계 재분할 milestone</dd></div>
+            <div><dt>4개 제품</dt><dd>공통 runtime과 독립 자산 경계</dd></div>
+            <div><dt>0 errors</dt><dd>strict policy milestone 결과</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section id="summary" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">01 · 1-page Summary</div>
+          <div><h2>처음의 자동 작성에서 현재의 통제된 운영 플랫폼까지</h2><p class="section-intro">실패할 때마다 문장을 다시 쓰는 대신, 그 실패를 더 앞 단계에서 잡는 schema, validator, 상태 모델 또는 운영 Gate로 바꿨습니다.</p></div>
+        </div>
+
+        <div class="summary-grid">
+          <section class="summary-item"><h3>출발점</h3><p>Claude Code가 문서와 Excel을 직접 읽고 쓰는 단일 흐름이었습니다. 문서 권위, TC schema, 실행 이력과 검증 자동화가 없었습니다.</p></section>
+          <section class="summary-item"><h3>핵심 전환</h3><p>정답을 더 잘 생성하는 문제를 떠나, 근거 분류, 제품 범위, 상태 전이, run snapshot과 재조회 검증을 설계했습니다.</p></section>
+          <section class="summary-item"><h3>현재 완료 정의</h3><p>YAML quality, 테스트, 웹 revision 재조회, Jira reread와 Excel 2013 실제 열기까지 통과해야 산출물이 완료됩니다.</p></section>
+        </div>
+
+        <section class="table-scroll" aria-label="단계별 전환점 표">
+          <table>
+            <thead><tr><th scope="col">단계</th><th scope="col">이전 방식</th><th scope="col">전환점</th><th scope="col">새 통제 장치</th></tr></thead>
+            <tbody>
+              <tr><td>1. 문서 읽기</td><td>문단 중심 요약</td><td>화면과 초기 설정 절차 누락</td><td>렌더링 이미지 검토, 화면 단위 pre-chunk, coverage matrix</td></tr>
+              <tr><td>2. TC 세분화</td><td>기능 하나를 TC 하나로 작성</td><td>열기·조회·재조회는 서로 다른 실패를 검출</td><td>상태 전이와 관찰 지점별 독립 TC</td></tr>
+              <tr><td>3. 데이터 구조화</td><td>Markdown/Excel이 원본</td><td>정의와 결과가 섞여 재생성 불가</td><td>정책 YAML, TC·dataset·suite·run 분리</td></tr>
+              <tr><td>4. 실행 차수</td><td>매 차수 Excel 복사</td><td>이전 FAIL과 변경 TC 의미 소실</td><td>run snapshot, inheritance, PENDING, Not Run, retired</td></tr>
+              <tr><td>5. Jira</td><td>사람이 상태 재입력</td><td>Closed 이슈 PASS 반영 누락</td><td>Fix Version 전수 대조, ETag PUT, reread verify</td></tr>
+              <tr><td>6. 웹 운영</td><td>읽기 전용 catalog</td><td>파일 변경 후 프로세스 cache가 과거 TC 노출</td><td>explicit invalidate, watcher, LKG, stale 가시성</td></tr>
+              <tr><td>7. 산출물</td><td>생성 성공을 완료로 간주</td><td>office 앱별 색상·수식·레이아웃 차이</td><td>구조 검사 후 Excel 2013 final-open Gate</td></tr>
+              <tr><td>8. 다제품</td><td>공통 기능과 제품 자산 혼재</td><td>존재하지 않는 제품 기능이 TC에 포함</td><td>제품별 branch/root/instance, 공통 runtime만 승격</td></tr>
+              <tr><td>9. Claude</td><td>작성 결과를 바로 신뢰</td><td>근거 없는 귀인과 긴 중간 출력</td><td>sanitized read-only review와 local disposition</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </section>
+
+    <section id="architecture" class="band alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">02 · Current Architecture</div>
+          <div><h2>문서/기획서 → 요구사항 분해 → YAML TC → run/Jira → 웹 → Excel</h2><p class="section-intro">사람의 판단이 필요한 Evidence Gate를 가운데 두고, 정의·실행·운영·출력을 각각 별도 책임으로 나눴습니다.</p></div>
+        </div>
+        <div class="architecture">
+          <pre class="mermaid">
+flowchart LR
+  A["문서 / 기획서 / 화면 증거"] --&gt; B["요구사항 분해&lt;br/&gt;Q&amp;A Evidence Gate"]
+  B --&gt;|confirmed| D["YAML TC&lt;br/&gt;정적 Validator"]
+  B --&gt;|unresolved| H["사람 확인"]
+  H --&gt; B
+  D --&gt; F["Run Snapshot&lt;br/&gt;Jira 상태 동기화"]
+  F --&gt; W["웹 실행 / 편집&lt;br/&gt;Cache consistency"]
+  W --&gt; X["Excel 생성&lt;br/&gt;Excel 2013 검증"]
+          </pre>
+          <noscript><p>문서/기획서/화면 증거 → 요구사항 분해 → Evidence Gate → YAML TC → Validator → Run/Jira → 웹 → Excel → Excel 2013 검증</p></noscript>
+        </div>
+        <ul class="responsibility-list">
+          <li><strong>입력 근거층:</strong> 매뉴얼, 릴리즈 노트, 스크린샷, 코드·심볼의 읽기 전용 증거, 사용자 정정</li>
+          <li><strong>해석층:</strong> 기능·상태·전이와 정상·예외·경계를 분해하고 주장을 네 가지 evidence 상태로 분류</li>
+          <li><strong>정의층:</strong> 정책과 YAML TC가 권위 원본이며 precondition, dataset, suite와 lifecycle을 별도 소유</li>
+          <li><strong>실행층:</strong> run이 활성 TC를 snapshot하고 Jira, 승계 결과, 미확인 FAIL과 Not Run을 관리</li>
+          <li><strong>운영층:</strong> 제품별 웹이 ETag, atomic write, cache invalidation, last-known-good를 적용</li>
+          <li><strong>출력층:</strong> Markdown/웹은 검토용, Excel은 명시 요청 뒤 최종 앱 검증까지 통과해야 완료</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="timeline" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">03 · Evidence Timeline</div>
+          <div><h2>증거 연표와 수행 내용</h2><p class="section-intro">사용자의 정정이 어떤 즉시 수정으로 끝났고, 다시 같은 문제가 생기지 않도록 무엇을 자산화했는지 연결했습니다.</p></div>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item"><div class="timeline-date">2026-06-30</div><div class="timeline-copy"><h3>문서 구조와 화면 경계 확립</h3><p><strong>관찰:</strong> 4~6개 화면 묶음에 의미가 섞였고 초기 설정, 장비 등록과 모델 선택이 빠졌습니다.</p><p><strong>조치:</strong> DOCX 100쪽을 렌더링하고 이미지와 본문을 함께 대조해 하위 화면별 pre-chunk로 재분할했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-07-01</div><div class="timeline-copy"><h3>기능 목록에서 상태 전이 TC로</h3><p><strong>관찰:</strong> 단일 모델도 기본 열기, 올바른 조회, 조건 변경 후 데이터 혼입이 서로 다른 위험이었습니다.</p><p><strong>조치:</strong> 모든 보고서의 단일 모델 baseline을 세 TC로 분리했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-07-03~10</div><div class="timeline-copy"><h3>첫 릴리즈 전체 회귀와 WPF edge case</h3><p><strong>관찰:</strong> WPF 창을 유지한 연속 조회와 export가 사용자 경험에 치명적인 회귀 표면이었습니다.</p><p><strong>조치:</strong> 비동기 완료 역전, 0건, 오류·취소, 반복 조회, 창 재오픈과 정렬·필터 export를 추가했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-07-13~14</div><div class="timeline-copy"><h3>화면 snapshot export와 웹 write 계약</h3><p><strong>관찰:</strong> 정렬한 화면 대신 source를 재조회한 파일이 생성됐고, batch 누적 의미도 초기 해석과 달랐습니다.</p><p><strong>조치:</strong> visible snapshot 계약, run 결과 모델, ETag, explicit invalidate, 직접 편집과 파일 기반 정적 token을 구현했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-07-23~25</div><div class="timeline-copy"><h3>run lifecycle과 Jira reconciliation</h3><p><strong>관찰:</strong> 같은 Fix Version의 새 차수에서 과거 결과와 변경 TC를 구별할 수 없었습니다.</p><p><strong>조치:</strong> 결과 승계, PENDING, Not Run, retired 보존과 Jira 전수 대조, 불완전한 제안의 mutation 전 복구를 적용했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-07-27</div><div class="timeline-copy"><h3>기능 경계 재분할과 검색 자산화</h3><p><strong>관찰:</strong> 11개 묶음 변경점이 실제 기능과 회귀 영향 경계를 숨겼습니다.</p><p><strong>조치:</strong> 29개 기능 경계, 203 TC, 47 dataset과 한국어·영어·중국어·일본어 검색 별칭으로 보강했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-07-28~08-14</div><div class="timeline-copy"><h3>Claude의 역할을 reviewer로 재배치</h3><p><strong>관찰:</strong> 무응답처럼 보이는 긴 실행, 중간 JSON 소모와 잘못된 기준선 귀인이 있었습니다.</p><p><strong>조치:</strong> 20~30분 wait, 최종 텍스트만 수집, sanitized read-only packet과 base/head 검증을 의무화했습니다.</p></div></article>
+          <article class="timeline-item"><div class="timeline-date">2026-08-13~18</div><div class="timeline-copy"><h3>공통 후처리와 제품 경계 강화</h3><p><strong>관찰:</strong> Jira Closed FAIL의 PASS 후처리가 빠졌고 고객사 전용 제품에 비대상 모듈 TC가 섞였습니다.</p><p><strong>조치:</strong> 공통 Jira 조회-판정-PUT-재조회 모듈, Excel 2013 Gate와 제품 scope lock을 도입했습니다.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="failures" class="band alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">04 · Failure Response</div>
+          <div><h2>실패 대응표</h2><p class="section-intro">실수의 영향, 실제 탐지 신호와 재발 방지 장치를 같은 행에 두었습니다. 수정 결과보다 탐지 가능성과 통제 위치가 중요했습니다.</p></div>
+        </div>
+        <div class="table-scroll">
+          <table class="failure-table">
+            <thead><tr><th scope="col">실수</th><th scope="col">영향</th><th scope="col">탐지 방법</th><th scope="col">재발 방지 장치</th></tr></thead>
+            <tbody>
+              <tr><td>화면 4~6개를 한 청크로 묶음</td><td>검색과 TC에 여러 기능 목적이 섞임</td><td>heading과 렌더링 화면의 목적 대조</td><td>하위 화면 단위 pre-chunk boundary</td></tr>
+              <tr><td>초기 설정·장비 등록·모델 선택 누락</td><td>신규 QA가 시작 상태를 만들 수 없음</td><td>원문 heading, image inventory, 생성 index 양방향 비교</td><td>source-to-chunk coverage matrix</td></tr>
+              <tr><td>단일 모델을 TC 하나로 처리</td><td>재조회 데이터 혼입을 놓침</td><td>창을 유지한 조건 변경 재조회</td><td>open·query·reload-mix 독립 baseline</td></tr>
+              <tr><td>WPF 정상 경로만 검증</td><td>이전 async 응답이 최신 화면을 덮음</td><td>빠른 연속 조회, 0건, 오류, 취소, 재오픈</td><td>latest-result-wins와 old-data non-mix 기대 결과</td></tr>
+              <tr><td>export가 화면 대신 source 재조회</td><td>사용자 정렬과 파일 순서 불일치</td><td>같은 시점의 화면 행·순서와 파일 비교</td><td>visible snapshot export와 source mutation TC</td></tr>
+              <tr><td>누적 batch 의미 오해</td><td>차수별 기대 건수 오류</td><td>실제 업무 규칙과 batch별 파일 비교</td><td>명시적 기대식과 정정의 정책 승격</td></tr>
+              <tr><td>웹 process cache가 과거 TC 유지</td><td>오래된 목록으로 검증 수행</td><td>file revision, loaded time, API count 비교</td><td>explicit invalidate, watcher, stale와 LKG</td></tr>
+              <tr><td>Jira Closed인데 FAIL 유지</td><td>차수 결과와 결함 현황 불일치</td><td>Fix Version key와 run key 합집합 대조</td><td>상태 정책, ETag PUT, 저장 후 reread</td></tr>
+              <tr><td>Excel 생성 성공만 확인</td><td>색상·수식·유효성 검사 파손</td><td>최종 앱으로 두 sheet 시각 검토</td><td>구조 검사 + Excel 2013 final-open Gate</td></tr>
+              <tr><td>유사 제품에서 기능 범위 상속</td><td>비대상 모듈·장비 전제 혼입</td><td>제품 근거와 금지 용어 검색</td><td>product/branch/root lock과 validator</td></tr>
+              <tr><td>과거 package path/date 승계</td><td>잘못된 설치 파일과 차수 사용</td><td>재귀 탐색 결과와 파일명 날짜 비교</td><td>release별 source declaration</td></tr>
+              <tr><td>계정 체계를 먼저 과설계</td><td>Excel보다 불편한 도구가 됨</td><td>사용자 수와 기존 업무 흐름 검토</td><td>파일 기반 정적 token, HR 연동 연기</td></tr>
+              <tr><td>Claude finding을 즉시 사실화</td><td>기존 문제를 새 회귀로 오판</td><td>정확한 base/head semantic diff</td><td>local validation과 disposition 기록</td></tr>
+              <tr><td>중간 JSON·추론 stream 수집</td><td>컨텍스트 소진과 판단 흐림</td><td>출력량과 timeout 관찰</td><td>20~30분 wait, 최종 텍스트만 수집</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="retrospective" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">05 · Technical Retrospective</div>
+          <div><h2>실수를 더 앞 단계에서 잡는 구조로 옮겼습니다</h2><p class="section-intro">프롬프트를 반복 수정하는 대신 입력, 상태, 저장, 실행, 출력의 책임 경계를 세분화했습니다.</p></div>
+        </div>
+
+        <article class="story"><div><span class="story-number">01</span><span class="story-label">Evidence before prompt</span></div><div class="story-copy"><h3>첫 실패는 LLM의 문장력이 아니라 입력 경계였습니다.</h3><p>이미지가 많은 DOCX는 텍스트만 읽어서 화면 순서와 초기 상태를 복원할 수 없었습니다. 여러 화면을 한 덩어리로 요약하면 검색에는 편해 보여도 실제 TC의 사전 조건과 성공 기준이 섞였습니다.</p><p>원본을 보존한 채 전체 문서를 렌더링하고 heading, page screenshot, embedded image inventory를 대조했습니다. 자동화의 첫 schema는 TC가 아니라 “무엇을 근거로 읽었는가”였습니다.</p></div></article>
+
+        <article class="story"><div><span class="story-number">02</span><span class="story-label">State transition</span></div><div class="story-copy"><h3>기능 목록을 상태 전이 모델로 바꿨습니다.</h3><p>보고서가 열린다는 사실, 올바른 데이터가 조회된다는 사실, 조건을 바꿔도 이전 데이터가 남지 않는다는 사실은 서로 다른 품질 주장입니다. TC 수를 줄이는 것보다 한 TC가 한 가지 실패를 설명하게 하는 편이 실행과 결함 분류에 유리했습니다.</p><pre class="state-flow">미조회 -&gt; 조회 성공 -&gt; 다른 조건 조회
+조회 성공 -&gt; 0건
+조회 성공 -&gt; 오류 -&gt; 재시도 성공
+요청 A 시작 -&gt; 요청 B 시작 -&gt; B 완료 -&gt; A 늦은 완료
+정렬/필터 -&gt; export -&gt; 화면과 파일 비교
+창 유지 -&gt; 닫기 -&gt; 재오픈</pre></div></article>
+
+        <article class="story"><div><span class="story-number">03</span><span class="story-label">Structured authority</span></div><div class="story-copy"><h3>Excel을 원본에서 projection으로 내렸습니다.</h3><p>Excel 셀에 정의, 결과, Jira와 코멘트를 모두 넣으면 익숙하지만 재사용과 변경 추적이 어렵습니다. 정의를 YAML로 옮기고 precondition, dataset, change, suite, run을 분리했습니다.</p><ul><li>같은 TC를 여러 차수에서 재사용</li><li>과거 FAIL과 후속 patch PASS를 별도 보존</li><li>변경 TC만 PENDING으로 전환</li><li>retired TC의 이력 보존과 신규 run N/A projection</li><li>tester와 Jira comment를 reusable 정의에서 분리</li></ul></div></article>
+
+        <article class="story"><div><span class="story-number">04</span><span class="story-label">Runtime consistency</span></div><div class="story-copy"><h3>웹은 보기 좋은 화면보다 상태 일관성이 먼저였습니다.</h3><p>가장 위험한 문제는 파일 저장 성공 뒤 프로세스 메모리가 과거 catalog를 계속 제공하는 것이었습니다. 공통 runtime은 write 뒤 명시적으로 invalidate하고 watcher도 같은 coordinator를 호출합니다.</p><p>후보 catalog 검증이 실패하면 last-known-good를 유지하고 stale 여부와 revision을 노출합니다. “저장했다”가 아니라 “새 revision을 다시 읽었고 사용자 화면도 같은 값을 본다”가 완료입니다.</p></div></article>
+
+        <article class="story"><div><span class="story-number">05</span><span class="story-label">Run and Jira</span></div><div class="story-copy"><h3>실행 차수와 Jira를 별도 상태 기계로 만들었습니다.</h3><p>새 release와 새 run의 경계를 분리하고, run 생성 시점의 active TC를 snapshot합니다. Jira 상태는 TC 정의가 아니라 실행 증거입니다.</p><p>공통 후처리는 Fix Version 전체 issue를 대조하고 상태를 판정한 뒤, 각 write 직전 ETag를 확인하고 저장 후 재조회합니다. 이 단계가 빠지면 Closed 이슈가 계속 FAIL로 남거나 미실행 TC가 자동 PASS가 될 수 있습니다.</p></div></article>
+
+        <article class="story"><div><span class="story-number">06</span><span class="story-label">Shared core, isolated product</span></div><div class="story-copy"><h3>공통화와 제품 격리를 동시에 설계했습니다.</h3><p>공통화 대상은 schema, validator, web runtime, Jira reconciliation과 Excel 규칙입니다. 제품별 release note, TC, dataset, run과 장비 전제는 공통화하지 않습니다.</p><p>제품 UI가 비슷하다는 사실은 기능 존재의 증거가 아닙니다. 비대상 모듈이 섞인 실제 오류 뒤에는 작업 시작 시 제품 범위를 잠그고 금지 용어를 검사하도록 바꿨습니다.</p></div></article>
+
+        <article class="story"><div><span class="story-number">07</span><span class="story-label">Claude governance</span></div><div class="story-copy"><h3>Claude를 작성자에서 독립 reviewer로 재배치했습니다.</h3><p>Claude Code는 빠르게 구조를 만드는 데 유용했지만, 긴 실행에서 무응답처럼 보이거나 중간 JSON이 컨텍스트를 소진했고 기존 기준선 문제를 현재 변경 탓으로 잘못 귀인하기도 했습니다.</p><p>이후 제품·브랜치 경계, acceptance criteria, sanitized diff, 권위 문서와 검증 결과만 전달합니다. 최종 finding은 로컬에서 재확인하고 accepted, rejected, deferred disposition을 기록합니다.</p><div class="quote">현재의 목표는 “AI가 맞히는 비율”이 아니라 “AI가 틀려도 잘못된 TC·결과·산출물이 다음 단계로 통과하지 않는 비율”입니다.</div></div></article>
+      </div>
+    </section>
+
+    <section id="evidence" class="band alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">06 · Evidence Appendix</div>
+          <div><h2>근거 부록</h2><p class="section-intro">상세 근거는 중앙 공개 정책에 따라 기본으로 접었습니다. 내부 추적에 필요한 범위만 익명화해 제공합니다.</p></div>
+        </div>
+
+        <details data-detail-default="collapsed">
+          <summary>주요 사용자 정정과 제도화 결과</summary>
+          <div class="detail-body table-scroll">
+            <table>
+              <thead><tr><th scope="col">사용자 정정 요지</th><th scope="col">즉시 수정</th><th scope="col">제도화된 장치</th></tr></thead>
+              <tbody>
+                <tr><td>하위 화면 단위로 청킹</td><td>청크를 화면별 재분할</td><td>pre-chunk boundary 규칙</td></tr>
+                <tr><td>초기 설정·장비 등록·모델 선택 누락</td><td>누락 chapter 추가</td><td>source coverage matrix</td></tr>
+                <tr><td>단일 모델도 열기·조회·갱신 혼입 분리</td><td>기본 TC 3분할</td><td>report baseline pattern</td></tr>
+                <tr><td>다중 모델·월별·barcode·조건 변경 재조회</td><td>variant와 WPF 예외 TC 추가</td><td>state-transition checklist</td></tr>
+                <tr><td>내보내기는 현재 화면과 동일</td><td>정렬·필터·batch snapshot 검증</td><td>screen-to-file Gate</td></tr>
+                <tr><td>과거 TC 수는 process cache 문제</td><td>instance reload와 수동 확인</td><td>explicit invalidation과 stale/LKG</td></tr>
+                <tr><td>Closed Jira FAIL의 PASS 변경 누락</td><td>결과 후처리</td><td>공통 reconciliation과 reread verify</td></tr>
+                <tr><td>최종 XLSX는 Excel 2013으로 확인</td><td>검증 앱 변경</td><td>Excel 2013 final-open Gate</td></tr>
+                <tr><td>고객사 전용 제품의 비대상 모듈 제거</td><td>잘못된 TC 삭제가 아닌 retire/정정</td><td>product scope lock과 용어 검사</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details data-detail-default="collapsed">
+          <summary>내부 commit 증거 식별자</summary>
+          <div class="detail-body">
+            <p>짧은 SHA는 비공개 업무 저장소의 감사용 식별자입니다. 공개 GitHub에서 링크되지는 않으며 고객명과 Jira 키를 제거한 의미만 기록합니다.</p>
+            <div class="table-scroll"><table>
+              <thead><tr><th scope="col">SHA</th><th scope="col">날짜</th><th scope="col">공개 가능한 의미</th></tr></thead>
+              <tbody>
+                <tr><td><code>7c44e15</code></td><td>2026-07-13</td><td>회사 TC 표기 규칙을 policy와 validator로 고정</td></tr>
+                <tr><td><code>eea3c0a</code></td><td>2026-07-14</td><td>공통 TC 편집·추가·복제와 transactional write</td></tr>
+                <tr><td><code>3f9e243</code></td><td>2026-07-23</td><td>같은 릴리즈의 실행 결과 승계와 미확인 FAIL 가시화</td></tr>
+                <tr><td><code>7c58b00</code></td><td>2026-07-25</td><td>불완전한 LLM 제안을 mutation 전에 복구·차단</td></tr>
+                <tr><td><code>c5568e8</code></td><td>2026-07-27</td><td>기능 경계 재분할 뒤 203 TC와 다국어 검색 별칭 보강</td></tr>
+                <tr><td><code>5780674</code>, <code>195ba1c</code></td><td>2026-08-13</td><td>제품 공통 Jira 상태 동기화와 재조회 검증</td></tr>
+                <tr><td><code>6d968b0</code>, <code>23e4c58</code></td><td>2026-08-14</td><td>Claude read-only review 정책과 권위 문서 진입점</td></tr>
+                <tr><td><code>d432cc5</code></td><td>2026-08-18</td><td>고객사 전용 제품에서 비대상 모듈 TC 제거</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </details>
+
+        <details data-detail-default="collapsed">
+          <summary>검증 명령과 기록된 결과</summary>
+          <div class="detail-body">
+            <pre class="command">pnpm tc:quality
+pnpm test
+pnpm test:e2e
+pnpm assets:instances:audit
+pnpm runs:jira:sync -- --project &lt;PROJECT&gt; --release &lt;RELEASE&gt; --run &lt;RUN&gt;</pre>
+            <ul>
+              <li>기능 경계 재분할 milestone에서 203 TC, 47 dataset이 strict policy를 오류 0, 경고 0으로 통과했습니다.</li>
+              <li>웹 authoring E2E는 데스크톱 1440x900의 edit, create, clone, ETag conflict, result save, stale와 recovery를 검증했고 browser error는 0이었습니다.</li>
+              <li>다제품 audit는 각 instance의 project identity, definition/run validation과 <code>stale=false</code>를 함께 확인합니다.</li>
+              <li>Jira 동기화는 조회, 판정, ETag PUT, 재조회 비교가 모두 끝나야 성공입니다.</li>
+              <li>회사 XLSX는 구조 검증 후 Excel 2013에서 repair/compatibility 경고, 수식, 색상, 유효성 검사, Jira와 빈 결과 셀을 확인합니다.</li>
+            </ul>
+            <p><a href="tc-automation-retrospective.md">동기화된 Markdown 근거 원본 열기</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="claude-runbook" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-index">07 · Claude Runbook</div>
+          <div><h2>Claude가 읽고 같은 통제 순서로 작업하는 상세 런북</h2><p class="section-intro">마지막 산출물은 설명문이 아니라 다음 에이전트가 제품 범위를 잠그고 Evidence Gate부터 검증까지 그대로 실행할 수 있는 운영 절차입니다.</p></div>
+        </div>
+
+        <div class="runbook-banner">
+          <div><h3>Claude TC 자동화 상세 런북</h3><p>Scope Lock, 필수 읽기 순서, evidence 분류, WPF 상태 매트릭스, run/Jira, cache invalidation, Excel Gate, stop condition과 handoff 형식을 포함합니다.</p></div>
+          <div class="button-row"><a class="button" href="claude-tc-automation-runbook.md">상세 런북 열기</a><a class="button secondary" href="tc-automation-retrospective.md">Markdown 회고 열기</a></div>
+        </div>
+
+        <div class="runbook-checklist">
+          <section><h3>시작</h3><p>제품, 저장소, branch, release, Fix Version, patch와 run을 잠근 뒤 ActiveDocs와 관련 권위 문서를 읽습니다.</p></section>
+          <section><h3>작성</h3><p>주장을 confirmed/inference/recommendation/unresolved로 분류하고 상태 전이, 예외와 경계 TC를 구성합니다.</p></section>
+          <section><h3>완료</h3><p>quality, tests, desktop E2E, cache revision reread, Jira reread와 최종 Excel 앱 검증을 증거로 남깁니다.</p></section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap"><a href="../resume/qa-automation.html">QA Automation 이력서로 돌아가기</a> · 공개본은 내부 업무 근거를 익명화했습니다.</div>
+  </footer>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      securityLevel: "strict",
+      themeVariables: {
+        fontFamily: "Pretendard, Noto Sans KR, Segoe UI, Arial, sans-serif",
+        primaryColor: "#edf7f3",
+        primaryTextColor: "#131820",
+        primaryBorderColor: "#24715b",
+        lineColor: "#3e6792",
+        secondaryColor: "#eef4fa",
+        tertiaryColor: "#faf5e8",
+        clusterBkg: "#ffffff",
+        clusterBorder: "#ccd3d9",
+        fontSize: "16px"
+      },
+      flowchart: { curve: "linear", htmlLabels: true }
+    });
+  </script>
+</body>
+</html>
