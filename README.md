@@ -12,6 +12,9 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 - `index.html`: market-facing resume summary and portfolio gateway.
 - `portfolio/release-qa.html`: detailed Release QA portfolio page using the original evidence-pack design tone.
 - `portfolio/documentation-os.html`: detailed documentation operating system portfolio page.
+- `portfolio/tc-automation-evolution.html`: TC automation technical retrospective with the one-page summary, architecture, evidence timeline, failure-response table, and public evidence appendix.
+- `portfolio/tc-automation-retrospective.md`: Markdown authority for the TC automation retrospective.
+- `portfolio/claude-tc-automation-runbook.md`: Claude-specific, product-scoped TC authoring and review runbook.
 - `release_qa_detail.md`: Markdown source for the collapsed Release QA detail evidence section.
 - `CENTRAL_DOCUMENT_POLICY.md`: central policy for page roles, detail disclosure, and Markdown/HTML sync.
 - `portfolio/automation-doc-structure/`: neutralized structure-only source material for the documentation portfolio page.
@@ -22,6 +25,8 @@ Resume and portfolio site for `prefix9671`, published with GitHub Pages.
 - `index.html` explains the market problem and links to detailed portfolio pages.
 - `portfolio/release-qa.html` preserves the original `AI-native Resume Evidence Pack - Release QA` detailed page tone.
 - `portfolio/documentation-os.html` presents the document structure case as a detailed portfolio page.
+- `portfolio/tc-automation-evolution.html` presents the transition from direct LLM/Excel authoring to an evidence-gated YAML, run/Jira, web, and final-application validation platform.
+- The TC automation retrospective starts with a visible one-page summary and keeps the neutralized evidence appendix collapsed by default.
 - The documentation case includes session logs, phase completion criteria, blocker/alternative/review notes, QA gates, and Wiki knowledge promotion.
 - Release QA detail evidence is collapsed by default and opened only by readers who need it.
 - Release QA evidence edits start in `release_qa_detail.md`, then the HTML detail block is synchronized before publishing.
