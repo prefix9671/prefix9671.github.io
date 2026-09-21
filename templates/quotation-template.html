@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>견적서 템플릿</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:#fff; }
+  body {
+    font-family: "Noto Sans KR","Noto Sans CJK KR","NanumGothic",Arial,sans-serif;
+    color:#182434;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page {
+    width:210mm;
+    min-height:297mm;
+    margin:0 auto;
+    padding:12mm 11mm 10mm;
+    position:relative;
+    background:#fff;
+  }
+  .title {
+    text-align:center;
+    font-size:26pt;
+    font-weight:800;
+    letter-spacing:.36em;
+    margin:3mm 0 2mm;
+    color:#172536;
+  }
+  .title-line {
+    width:66mm;
+    border-bottom:1.5mm solid #172536;
+    margin:0 auto 11mm;
+  }
+  .top {
+    display:grid;
+    grid-template-columns:1.42fr .9fr;
+    column-gap:13mm;
+    align-items:start;
+  }
+  .recipient { padding-top:11mm; }
+  .recipient .name {
+    font-size:16pt;
+    font-weight:800;
+    display:inline-block;
+    padding-bottom:3mm;
+    border-bottom:.7mm solid #223043;
+    min-width:87mm;
+  }
+  .recipient .desc {
+    font-size:11pt;
+    color:#5b6573;
+    margin-top:4mm;
+  }
+  .supplier, .summary, .items {
+    border-collapse:collapse;
+    width:100%;
+  }
+  .supplier { font-size:10.5pt; }
+  .supplier td {
+    border:.25mm solid #b2bac4;
+    padding:3.2mm 3mm;
+    text-align:center;
+    height:11mm;
+  }
+  .supplier td:first-child {
+    width:34%;
+    background:#f4f6f8;
+    font-weight:700;
+    color:#3d4b5c;
+  }
+  .supplier td:last-child {
+    font-weight:600;
+    color:#26364a;
+  }
+  .summary {
+    margin-top:9mm;
+    font-size:11pt;
+  }
+  .summary td {
+    border:.28mm solid #536171;
+    height:15mm;
+    padding:3mm 4mm;
+  }
+  .summary .label {
+    width:25%;
+    background:#f4f5f7;
+    text-align:center;
+    font-weight:800;
+    font-size:11.5pt;
+  }
+  .summary .value {
+    font-weight:700;
+    font-size:12pt;
+  }
+  .summary .amount {
+    color:#2250d8;
+    font-size:16pt;
+    font-weight:900;
+    letter-spacing:.02em;
+  }
+  .summary .vat {
+    font-size:9pt;
+    color:#8a93a0;
+    font-weight:500;
+    margin-left:2mm;
+  }
+  .items {
+    margin-top:7mm;
+    font-size:9.5pt;
+    table-layout:fixed;
+  }
+  .items th, .items td { border:.28mm solid #536171; }
+  .items th {
+    height:12mm;
+    background:#f4f5f7;
+    font-size:10.5pt;
+    font-weight:800;
+    text-align:center;
+  }
+  .items .col-no { width:5%; }
+  .items .col-spec { width:62%; }
+  .items .col-qty { width:5.5%; }
+  .items .col-unit { width:9.5%; }
+  .items .col-supply { width:10%; }
+  .items .col-tax { width:8%; }
+  .mainrow td { min-height:47mm; vertical-align:middle; }
+  .center { text-align:center; }
+  .spec { padding:5mm 6mm; vertical-align:top !important; }
+  .spec .headline {
+    font-size:11.5pt;
+    font-weight:900;
+    margin-bottom:2.7mm;
+  }
+  .spec ul {
+    margin:0;
+    padding-left:6mm;
+    line-height:1.65;
+  }
+  .spec strong { font-weight:900; }
+  .num {
+    text-align:right;
+    padding-right:2mm;
+    white-space:nowrap;
+    font-size:9pt;
+  }
+  .blank td { height:14mm; }
+  .total td {
+    height:14mm;
+    background:#f4f5f7;
+    font-weight:800;
+    font-size:10pt;
+  }
+  .total-label {
+    text-align:center;
+    font-size:11pt !important;
+    letter-spacing:.16em;
+  }
+  .notes {
+    border:.25mm solid #bcc4cd;
+    margin-top:6mm;
+    padding:4.5mm 6mm 4mm;
+    color:#54606f;
+    font-size:9.7pt;
+    min-height:44mm;
+  }
+  .notes .head {
+    font-size:11pt;
+    color:#1d2b3c;
+    font-weight:900;
+    letter-spacing:.12em;
+    margin-bottom:4mm;
+  }
+  .notes ul {
+    margin:0;
+    padding-left:6mm;
+    line-height:1.8;
+  }
+  .notes strong { color:#1f2c3d; font-weight:900; }
+  .footer {
+    text-align:center;
+    color:#a0a8b1;
+    font-size:8.5pt;
+    margin-top:7mm;
+  }
+  @media screen {
+    body { background:#eef1f5; padding:20px 0; }
+    .page { box-shadow:0 4px 18px rgba(0,0,0,.08); }
+  }
+  @media print {
+    body { background:#fff; }
+    .page { margin:0; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="title">견 적 서</div>
+  <div class="title-line"></div>
+
+  <div class="top">
+    <div class="recipient">
+      <div class="name" id="recipientName"></div>
+      <div class="desc" id="introText"></div>
+    </div>
+    <table class="supplier">
+      <tr><td>공급자</td><td id="supplierName"></td></tr>
+      <tr><td>대표자</td><td id="supplierRepresentative"></td></tr>
+      <tr><td>연락처</td><td id="supplierContact"></td></tr>
+    </table>
+  </div>
+
+  <table class="summary">
+    <tr>
+      <td class="label">견적 목적</td>
+      <td class="value" id="quotePurpose"></td>
+    </tr>
+    <tr>
+      <td class="label">합계 금액</td>
+      <td class="value">
+        <span class="amount" id="grandTotal"></span>
+        <span class="vat" id="vatLabel"></span>
+      </td>
+    </tr>
+  </table>
+
+  <table class="items">
+    <colgroup>
+      <col class="col-no"><col class="col-spec"><col class="col-qty"><col class="col-unit"><col class="col-supply"><col class="col-tax">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>No</th><th>품목 및 사양</th><th>수량</th><th>단가</th><th>공급가액</th><th>세액</th>
+      </tr>
+    </thead>
+    <tbody id="itemsBody"></tbody>
+    <tfoot>
+      <tr class="total">
+        <td colspan="4" class="total-label">총 계</td>
+        <td class="num" id="totalSupply"></td>
+        <td class="num" id="totalTax"></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="notes">
+    <div class="head">[ 특 기 사 항 ]</div>
+    <ul id="notesList"></ul>
+  </div>
+
+  <div class="footer" id="footerText"></div>
+</div>
+
+<script>
+/*
+ * 재사용 방법:
+ * 아래 QUOTE 객체만 수정하면 견적서 전체가 갱신됩니다.
+ * 금액은 숫자로 입력하세요. VAT 10% 기준이면 taxRate: 0.1 사용.
+ */
+const QUOTE = {
+  recipient: {
+    name: "[고객사명] 귀하",
+    intro: "아래와 같이 견적합니다."
+  },
+  supplier: {
+    name: "[공급자명]",
+    representative: "[대표자명]",
+    contact: "[연락처]"
+  },
+  purpose: "[견적 목적]",
+  currencySymbol: "₩",
+  vatIncludedLabel: "(VAT 포함)",
+  taxRate: 0.10,
+  items: [
+    {
+      name: "[품목명]",
+      specs: [
+        ["항목 1", "사양 입력"],
+        ["항목 2", "사양 입력"],
+        ["항목 3", "사양 입력"],
+        ["항목 4", "사양 입력"]
+      ],
+      qty: 1,
+      unitPrice: 0
+    }
+  ],
+  notes: [
+    "본 견적의 유효기간은 발행일로부터 <strong>14일</strong>입니다.",
+    "상기 금액은 부가세(VAT)가 포함된 금액입니다.",
+    "계약 또는 공급 기간은 별도 협의 내용에 따릅니다.",
+    "장비 훼손 및 파손 시 수리 비용이 별도로 청구될 수 있습니다."
+  ],
+  blankRows: 3,
+  footer: "이 문서는 전산으로 발행된 공식 견적서입니다."
+};
+
+const fmt = n => Number(n || 0).toLocaleString("ko-KR");
+const money = n => `${QUOTE.currencySymbol} ${fmt(n)}`;
+const esc = v => String(v ?? "")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+document.getElementById("recipientName").textContent = QUOTE.recipient.name;
+document.getElementById("introText").textContent = QUOTE.recipient.intro;
+document.getElementById("supplierName").textContent = QUOTE.supplier.name;
+document.getElementById("supplierRepresentative").textContent = QUOTE.supplier.representative;
+document.getElementById("supplierContact").textContent = QUOTE.supplier.contact;
+document.getElementById("quotePurpose").textContent = QUOTE.purpose;
+document.getElementById("vatLabel").textContent = QUOTE.vatIncludedLabel;
+document.getElementById("footerText").textContent = QUOTE.footer;
+
+let totalSupply = 0;
+let totalTax = 0;
+const body = document.getElementById("itemsBody");
+
+QUOTE.items.forEach((item, index) => {
+  const supply = Number(item.qty || 0) * Number(item.unitPrice || 0);
+  const tax = Math.round(supply * Number(QUOTE.taxRate || 0));
+  totalSupply += supply;
+  totalTax += tax;
+
+  const specs = (item.specs || []).map(([label, value]) =>
+    `<li><strong>${esc(label)}:</strong> ${esc(value)}</li>`
+  ).join("");
+
+  const tr = document.createElement("tr");
+  tr.className = "mainrow";
+  tr.innerHTML = `
+    <td class="center">${index + 1}</td>
+    <td class="spec">
+      <div class="headline">${esc(item.name)}</div>
+      <ul>${specs}</ul>
+    </td>
+    <td class="center">${fmt(item.qty)}</td>
+    <td class="num">${fmt(item.unitPrice)}</td>
+    <td class="num">${fmt(supply)}</td>
+    <td class="num">${fmt(tax)}</td>
+  `;
+  body.appendChild(tr);
+});
+
+for (let i = 0; i < Number(QUOTE.blankRows || 0); i++) {
+  const tr = document.createElement("tr");
+  tr.className = "blank";
+  tr.innerHTML = "<td></td><td></td><td></td><td></td><td></td><td></td>";
+  body.appendChild(tr);
+}
+
+document.getElementById("totalSupply").textContent = fmt(totalSupply);
+document.getElementById("totalTax").textContent = fmt(totalTax);
+document.getElementById("grandTotal").textContent = money(totalSupply + totalTax);
+document.getElementById("notesList").innerHTML = QUOTE.notes.map(note => `<li>${note}</li>`).join("");
+</script>
+</body>
+</html>
